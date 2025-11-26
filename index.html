@@ -1,0 +1,1112 @@
+<!--
+  Rewritten full file (style kept identical, improved JS + API integration + fixed animations)
+  Original uploaded file path: /mnt/data/deepseek_html_20251124_71d485.html
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>EntertainmentVerse — Cinematic Anime Neon</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* --------- Variables --------- */
+    :root {
+      --bg-1: #071025;
+      /* deep cinematic */
+      --bg-2: #0f1020;
+      --card: rgba(255, 255, 255, 0.05);
+      --glass: rgba(255, 255, 255, 0.04);
+      --neon: #8a2be2;
+      /* purple neon */
+      --accent: #ff6b6b;
+      --muted: #b9c2d3;
+      --glass-border: rgba(138, 43, 226, 0.12);
+      --glass-strong: rgba(255, 255, 255, 0.06);
+      --glass-blur: 10px;
+      --shadow: 0 10px 30px rgba(2, 6, 23, 0.6);
+      --radius: 14px;
+      --transition: 300ms cubic-bezier(.2, .9, .3, 1);
+    }
+
+    /* --------- Reset --------- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html,
+    body {
+      height: 100%
+    }
+
+    body {
+      font-family: Inter, 'Segoe UI', Roboto, system-ui, -apple-system;
+      background: radial-gradient(1200px 500px at 10% 10%, rgba(138, 43, 226, 0.06), transparent), linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      color: #e6eef8;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      line-height: 1.4;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* --------- Header --------- */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: linear-gradient(180deg, rgba(3, 6, 18, 0.6), rgba(3, 6, 18, 0.2));
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--neon)
+    }
+
+    .brand i {
+      font-size: 1.6rem;
+      color: var(--accent);
+      text-shadow: 0 6px 22px rgba(138, 43, 226, 0.25)
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 14px;
+      align-items: center
+    }
+
+    .nav-links a {
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-weight: 600;
+      color: var(--muted);
+      transition: var(--transition)
+    }
+
+    .nav-links a:hover {
+      color: #fff;
+      background: linear-gradient(90deg, rgba(138, 43, 226, 0.08), rgba(255, 107, 107, 0.03));
+      transform: translateY(-3px)
+    }
+
+    .auth {
+      display: flex;
+      gap: 10px
+    }
+
+    .btn {
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: transparent;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition)
+    }
+
+    .btn.primary {
+      background: linear-gradient(90deg, var(--neon), #6e23d9);
+      box-shadow: 0 8px 30px rgba(138, 43, 226, 0.25)
+    }
+
+    /* --------- Hero (Cinematic carousel + neon anime overlay) --------- */
+    .hero {
+      position: relative;
+      padding: 48px 16px 80px;
+      min-height: 72vh;
+      display: flex;
+      align-items: center;
+      justify-content: center
+    }
+
+    .hero-inner {
+      max-width: 1200px;
+      width: 100%;
+      position: relative
+    }
+
+    /* cinematic slider (auto) */
+    .cinema-wrap {
+      position: relative;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--glass-border)
+    }
+
+    .slides {
+      display: flex;
+      width: 400%;
+      height: 520px;
+      transform: translateX(0);
+      transition: transform 1s ease;
+      will-change: transform
+    }
+
+    .slide {
+      flex: 1 0 100%;
+      background-size: cover;
+      background-position: center;
+      position: relative
+    }
+
+    /* cinematic dim + vignette */
+    .slide::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(3, 6, 18, 0.2), rgba(3, 6, 18, 0.6));
+      mix-blend-mode: multiply
+    }
+
+    /* neon anime overlay */
+    .neon-overlay {
+      position: absolute;
+      right: 22px;
+      bottom: 22px;
+      padding: 18px;
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(10, 10, 16, 0.6), rgba(10, 10, 20, 0.3));
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(138, 43, 226, 0.14);
+      box-shadow: 0 12px 40px rgba(138, 43, 226, 0.08);
+      max-width: 420px;
+      display: none;
+      
+    }
+
+    .neon-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--neon), #ff6b6b);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent
+    }
+
+    .neon-meta {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 6px
+    }
+
+    .neon-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px
+    }
+
+    .pill {
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 700;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      cursor: pointer
+    }
+
+    .pill.play {
+      background: linear-gradient(90deg, #ff6b6b, var(--neon));
+      color: #fff
+    }
+
+    .pill.watchlist {
+      background: transparent;
+      color: var(--neon);
+      border: 1px dashed rgba(138, 43, 226, 0.18)
+    }
+
+    /* cinematic controls */
+    .hero-controls {
+      position: absolute;
+      left: 18px;
+      bottom: 26px;
+      display: flex;
+      gap: 8px
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      transition: var(--transition)
+    }
+
+    .dot.active {
+      background: linear-gradient(90deg, var(--neon), #ff6b6b);
+      box-shadow: 0 6px 20px rgba(138, 43, 226, 0.25)
+    }
+
+    /* caption */
+    .hero-caption {
+      position: absolute;
+      left: 36px;
+      top: 36px;
+      color: #fff;
+      background: linear-gradient(90deg, rgba(3, 6, 18, 0.4), transparent);
+      padding: 14px;
+      border-radius: 10px
+    }
+
+    .hero-caption h1 {
+      font-size: 2rem;
+      letter-spacing: -1px
+    }
+
+    .hero-caption p {
+      color: var(--muted);
+      margin-top: 6px;
+      font-size: 0.95rem
+    }
+
+    /* --------- Search bar with neon --------- */
+    .search-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-top: 18px
+    }
+
+    .search-input {
+      flex: 1;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.02), transparent);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      outline: none;
+      color: #fff;
+      font-weight: 600
+    }
+
+    .search-scope {
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      background: transparent;
+      font-weight: 700
+    }
+
+    /* --------- Content Sections --------- */
+    .section {
+      max-width: 1200px;
+      margin: 44px auto;
+      padding: 0 16px
+    }
+
+    .section h2 {
+      font-size: 1.6rem;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section h2 i {
+      color: var(--neon);
+    }
+
+    /* Horizontal scroll sections */
+    .h-scroll-section {
+      display: flex;
+      gap: 18px;
+      overflow-x: auto;
+      padding-bottom: 16px;
+      padding-top: 8px;
+      scroll-behavior: smooth;
+      white-space: nowrap;
+      
+    }
+
+    .h-scroll-section::-webkit-scrollbar {
+      height: 0px
+    }
+
+    .h-scroll-section::-webkit-scrollbar-track {
+      background: rgba(165, 129, 129, 0.02);
+      border-radius: 4px
+    }
+
+    .h-scroll-section::-webkit-scrollbar-thumb {
+      background: var(--neon);
+      border-radius: 4px
+    }
+
+    .h-scroll-section::-webkit-scrollbar-thumb:hover {
+      background: #a59bb3;
+      display: none;
+    }
+
+    /* Auto-scroll inner wrapper (APPLIED FIX) */
+    @keyframes autoScroll {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
+
+      /* move half (because we duplicate content) */
+    }
+
+    .auto-scroll-inner {
+      display: inline-flex;
+      gap: 18px;
+      will-change: transform;
+      animation: autoScroll 30s linear infinite;
+    }
+
+    .h-scroll-section:hover .auto-scroll-inner {
+      animation-play-state: continue;
+    }
+
+    /* Content cards */
+    .content-card {
+      display: inline-block;
+      vertical-align: top;
+      width: 220px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(6px);
+      transition: var(--transition);
+      cursor: pointer;
+      position: relative;
+      margin-right: 18px
+    }
+
+    .content-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 50px rgba(2, 6, 23, 0.6)
+    }
+
+    .content-card .art {
+      height: 320px;
+      background-size: cover;
+      background-position: center
+    }
+
+    .content-card .body {
+      padding: 12px
+    }
+
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center
+    }
+
+    .content-card .meta {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 8px
+    }
+
+    .rating {
+      display: flex;
+      gap: 6px;
+      align-items: center
+    }
+
+    /* badges */
+    .badge {
+      position: absolute;
+      left: 12px;
+      top: 12px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: linear-gradient(90deg, var(--neon), #6e23d9);
+      font-weight: 800;
+      color: #fff;
+      font-size: 0.8rem;
+      box-shadow: 0 8px 22px rgba(138, 43, 226, 0.18)
+    }
+
+    /* --------- Trailer modal --------- */
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1500
+    }
+
+    .modal.active {
+      display: flex
+    }
+
+    .modal .box {
+      width: 90%;
+      max-width: 980px;
+      background: linear-gradient(180deg, #041027, #081228);
+      border-radius: 12px;
+      overflow: hidden
+    }
+
+    .modal .close {
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 1.3rem
+    }
+
+    /* --------- Footer --------- */
+    footer {
+      margin-top: 60px;
+      padding: 28px 16px;
+      background: linear-gradient(180deg, rgba(3, 6, 18, 0.3), transparent);
+      border-top: 1px solid rgba(255, 255, 255, 0.02)
+    }
+
+    .foot-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 0.9rem
+    }
+
+    /* --------- Animations & small screens --------- */
+    @media (max-width:900px) {
+      .slides {
+        height: 420px
+      }
+
+      .neon-overlay {
+        position: static;
+        margin: 12px auto 0;
+        max-width: unset
+      }
+
+      .hero-caption {
+        position: static;
+        margin-bottom: 12px
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+    }
+
+    @media (max-width:600px) {
+      .slides {
+        height: 300px
+      }
+
+      .hero-inner {
+        padding-bottom: 8px
+      }
+
+      .content-card .art {
+        height: 220px
+      }
+
+      .content-card {
+        width: 180px
+      }
+
+      .auto-scroll-inner {
+        animation-duration: 45s
+      }
+    }
+
+    /* subtle particle background (css-only) */
+    .particles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.08
+    }
+
+    .particles i {
+      position: absolute;
+      font-size: 18px;
+      color: var(--neon);
+      filter: blur(0.6px)
+    }
+
+    /* Loading spinner */
+    .loader {
+      width: 48px;
+      height: 48px;
+      border: 5px solid rgba(138, 43, 226, 0.2);
+      border-bottom-color: var(--neon);
+      border-radius: 50%;
+      display: inline-block;
+      box-sizing: border-box;
+      animation: rotation 1s linear infinite;
+      margin: 20px auto;
+    }
+
+    @keyframes rotation {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- header -->
+  <header>
+    <div class="nav">
+      <div class="brand"><i class="fas fa-play-circle"></i>EntertainmentVerse</div>
+      <nav class="nav-links">
+        <a href="#home">Home</a>
+        <a href="anime.html">Anime</a>
+        <a href="movies.html">Movies</a>
+        <a href="series.html">Series</a>
+        <a href="manhwa.html">Manhwa</a>
+        <a href="#reviews">Reviews</a>
+      </nav>
+      <div class="auth">
+        <button class="btn" style="color:#e6eef8">Log in</button>
+        <button class="btn primary">Sign up</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- hero -->
+  <main class="hero" id="home">
+    <div class="hero-inner">
+      <div class="cinema-wrap">
+        <div class="slides" id="slides" aria-hidden="false">
+          <div class="slide"
+            style="background-image:url('https://github.com/dev-kalam/image/blob/main/anime.jpg')">
+            <!-- caption -->
+            <div class="hero-caption">
+              <h1>Cinematic Picks • Curated For You</h1>
+              <p>Hand-picked movies & anime with editorial reviews and
+                community ratings.</p>
+            </div>
+          </div>
+          <div class="slide"
+            style="background-image: url('D:\DBMS TEST\project\newtest\assets\series.jpg')">
+          </div>
+          <div class="slide"
+            style="background-image:url('D:\DBMS TEST\project\newtest\assets\series.jpg')">
+          </div>
+          <div class="slide"
+            style="background-image:url('D:\DBMS TEST\project\newtest\assets\series.jpg')">
+          </div>
+        </div>
+
+        <!-- neon anime overlay -->
+        <div class="neon-overlay" id="neon-overlay">
+          <div class="neon-title">Latest: "Shadow of Neon"</div>
+          <div class="neon-meta">Anime • 2025 • 24 eps • 8.9 rating</div>
+          <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
+            <div class="pill play" id="play-trailer"><i class="fas fa-play"></i>&nbsp;Watch Trailer</div>
+            <div class="pill watchlist">+ Watchlist</div>
+          </div>
+          <div style="margin-top:10px;color:var(--muted);font-size:0.92rem">By
+            <strong>Editor</strong> —
+            "A neon-noir anime with cinematic pacing and jaw-dropping visuals."
+          </div>
+        </div>
+
+        <!-- hero controls/dots -->
+        <div class="hero-controls" id="dots"></div>
+      </div>
+
+      <!-- search neon -->
+      <div style="display:flex;justify-content:center;margin-top:14px">
+        <div class="search-bar" style="max-width:880px;width:100%">
+          <input class="search-input" id="search"
+            placeholder="Search anime, movies, series, manhwa... e.g. 'Demon Slayer'" />
+          <select class="search-scope" id="scope">
+            <option>All</option>
+            <option>Anime</option>
+            <option>Movies</option>
+            <option>Series</option>
+            <option>Manhwa</option>
+          </select>
+          <button class="btn primary" id="search-btn"><i class="fas fa-search"></i></button>
+        </div>
+      </div>
+
+      <!-- subtle particle icons -->
+      <div class="particles" aria-hidden>
+        <i style="left:8%;top:18%;opacity:0.6">★</i>
+        <i style="left:20%;top:60%;font-size:12px">✧</i>
+        <i style="right:6%;top:28%;font-size:14px">☆</i>
+        <i style="left:50%;bottom:18%;font-size:16px">✦</i>
+      </div>
+    </div>
+  </main>
+
+  <!-- Anime Section -->
+  <section class="section" id="anime">
+    <h2><i class="fas fa-ghost"></i> Popular Anime</h2>
+    <div class="h-scroll-section" id="anime-scroll">
+      <div class="loader"></div>
+    </div>
+  </section>
+
+  <!-- Movies Section -->
+  <section class="section" id="movies">
+    <h2><i class="fas fa-film"></i> Trending Movies</h2>
+    <div class="h-scroll-section" id="movies-scroll">
+      <div class="loader"></div>
+    </div>
+  </section>
+
+  <!-- Series Section -->
+  <section class="section" id="series">
+    <h2><i class="fas fa-tv"></i> Top Series</h2>
+    <div class="h-scroll-section" id="series-scroll">
+      <div class="loader"></div>
+    </div>
+  </section>
+
+  <!-- Manhwa Section -->
+  <section class="section" id="manhwa">
+    <h2><i class="fas fa-book-open"></i> Manhwa Collection</h2>
+    <div class="h-scroll-section" id="manhwa-scroll">
+      <div class="loader"></div>
+    </div>
+  </section>
+
+  <!-- Featured Reviews Section -->
+  <section class="section" id="reviews">
+    <h2><i class="fas fa-star"></i> Featured Reviews</h2>
+    <div class="h-scroll-section" id="reviews-scroll">
+      <!-- Review cards will be injected by JS -->
+    </div>
+  </section>
+
+  <!-- trailer modal -->
+  <div class="modal" id="trailer-modal" aria-hidden="true">
+    <div class="box">
+      <button class="close" id="close-modal"><i class="fas fa-times"></i></button>
+      <div style="position:relative;padding-top:56.25%">
+        <iframe id="trailer-frame" src frameborder="0" allowfullscreen
+          style="position:absolute;inset:0;width:100%;height:100%"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- footer -->
+  <footer>
+    <div class="foot-inner">
+      <div>
+        <div style="font-weight:800;color:var(--neon)">EntertainmentVerse</div>
+        <div class="small">Cinematic picks • Anime neon • Reviews &
+          community</div>
+      </div>
+      <div class="small">© 2025 EntertainmentVerse — Crafted with glow &
+        passion</div>
+    </div>
+  </footer>
+
+  <script>
+    /************************************************************************
+     * Configuration
+     * You provided:
+     * - TMDB Read Access Token (v4 style)
+     * - TMDB API Key
+     * These are used directly below. If you want to hide them, move to server.
+     ************************************************************************/
+    const TMDB_READ_ACCESS_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxOWU1NDkyZGMwMzExMDcwZDcxNGY0NTZlYjZmYjA1ZiIsIm5iZiI6MTc2MzExMDI1MC42NDEsInN1YiI6IjY5MTZlZDZhMmMyMDU1YzZiZjMxY2I4NCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.JXgApe40Joywg_j-hKlapmB3Tfd7pfCjZkOzMMrJB-M';
+    const TMDB_API_KEY = '19e5492dc0311070d714f456eb6fb05f';
+    const JIKAN_BASE = 'https://api.jikan.moe/v4';
+
+    /************************************************************************
+     * Sample fallback data (used if fetch fails)
+     ************************************************************************/
+    const fallback = {
+      anime: [
+        { title: 'Demon Slayer', type: 'Anime', year: 2020, score: 8.7, poster: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=800&q=60', snippet: 'Tanjiro fights demons.' },
+        { title: 'Jujutsu Kaisen', type: 'Anime', year: 2020, score: 9.1, poster: 'https://images.unsplash.com/photo-1639322537504-6427a16b318a?auto=format&fit=crop&w=800&q=60', snippet: 'Yuji fights curses.' }
+      ],
+      manga: [
+        { title: 'Solo Leveling', type: 'Manga', year: 2018, score: 9.0, poster: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=60', snippet: 'Weak hunter becomes strong.' }
+      ],
+      movies: [
+        { title: 'Oppenheimer', type: 'Movie', year: 2023, score: 8.8, poster: 'https://images.unsplash.com/photo-1489599809505-fbe6c7bfb7c2?auto=format&fit=crop&w=800&q=60', snippet: 'The story of J. Robert Oppenheimer.' }
+      ],
+      series: [
+        { title: 'Stranger Things', type: 'Series', year: 2019, score: 8.9, poster: 'https://images.unsplash.com/photo-1495567720989-cebdbdd97913?auto=format&fit=crop&w=800&q=60', snippet: 'Kids uncover supernatural mysteries.' }
+      ]
+    };
+
+    /************************************************************************
+     * Helpers - create card element
+     ************************************************************************/
+    function createContentCard(item) {
+      const el = document.createElement('div');
+      el.className = 'content-card tilt';
+      const poster = item.poster || item.image || '';
+      const score = (item.score || item.rating || (item.score && item.score.toFixed ? item.score.toFixed(1) : item.score)) || '—';
+      const type = item.type || '';
+      const year = item.year || (item.release_date ? (new Date(item.release_date)).getFullYear() : '');
+      const snippet = item.snippet || item.overview || item.synopsis || '';
+
+      el.innerHTML = `
+        <div class="art" style="background-image:url('${poster}')"></div>
+        <div class="badge">${score}</div>
+        <div class="body">
+          <div class="title-row">
+            <div>
+              <strong>${escapeHtml(item.title || item.name || 'Untitled')}</strong>
+              <div style='color:var(--muted);font-size:0.85rem'>${type} • ${year}</div>
+            </div>
+          </div>
+          <div class='meta'>${escapeHtml(snippet.substring(0, 120))}${snippet.length > 120 ? '…' : ''}</div>
+        </div>
+      `;
+
+      // click opens trailer modal (we try to open an external trailer if available via TMDB YouTube or fallback to a youtube search)
+      el.addEventListener('click', async () => {
+        await openTrailerForItem(item);
+      });
+
+      return el;
+    }
+
+    function escapeHtml(s) {
+      if (!s) return '';
+      return s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": "&#39;" }[c]));
+    }
+
+    /************************************************************************
+     * Fetchers
+     ************************************************************************/
+    async function fetchTopAnime(limit = 8) {
+      try {
+        const res = await fetch(`${JIKAN_BASE}/top/anime?limit=${limit}`);
+        if (!res.ok) throw new Error('jikan anime failed');
+        const json = await res.json();
+        return json.data.map(a => ({
+          title: a.title,
+          poster: a.images?.jpg?.large_image_url || a.images?.jpg?.image_url || '',
+          year: a.aired?.from ? new Date(a.aired.from).getFullYear() : (a.year || ''),
+          score: a.score || a.rank || '—',
+          type: 'Anime',
+          synopsis: a.synopsis || ''
+        })).map(x => ({ ...x, snippet: x.synopsis }));
+      } catch (e) {
+        console.warn('fetchTopAnime failed', e);
+        return fallback.anime;
+      }
+    }
+
+    async function fetchTopManga(limit = 8) {
+      try {
+        const res = await fetch(`${JIKAN_BASE}/top/manga?limit=${limit}`);
+        if (!res.ok) throw new Error('jikan manga failed');
+        const json = await res.json();
+        return json.data.map(m => ({
+          title: m.title,
+          poster: m.images?.jpg?.large_image_url || '',
+          year: m.published?.from ? new Date(m.published.from).getFullYear() : (m.year || ''),
+          score: m.score || '—',
+          type: 'Manhwa',
+          synopsis: m.synopsis || ''
+        })).map(x => ({ ...x, snippet: x.synopsis }));
+      } catch (e) {
+        console.warn('fetchTopManga failed', e);
+        return fallback.manga;
+      }
+    }
+
+    async function fetchTMDBTrending(type = 'movie', limit = 8) {
+      try {
+        const url = `https://api.themoviedb.org/3/trending/${type}/week?api_key=${encodeURIComponent(TMDB_API_KEY)}`;
+        const res = await fetch(url, { headers: { Authorization: `Bearer ${TMDB_READ_ACCESS_TOKEN}`, Accept: 'application/json' } });
+        if (!res.ok) throw new Error('tmdb trending failed');
+        const json = await res.json();
+        const baseImg = 'https://image.tmdb.org/t/p/w780';
+        return (json.results || []).slice(0, limit).map(s => ({
+          title: s.title || s.name,
+          poster: s.poster_path ? baseImg + s.poster_path : (s.backdrop_path ? baseImg + s.backdrop_path : ''),
+          year: s.release_date ? (new Date(s.release_date)).getFullYear() : (s.first_air_date ? (new Date(s.first_air_date)).getFullYear() : ''),
+          score: s.vote_average ? s.vote_average.toFixed(1) : '—',
+          type: (type === 'movie' ? 'Movie' : 'Series'),
+          overview: s.overview || ''
+        })).map(x => ({ ...x, snippet: x.overview }));
+      } catch (e) {
+        console.warn('fetchTMDBTrending failed', e);
+        return (type === 'movie') ? fallback.movies : fallback.series;
+      }
+    }
+
+    /************************************************************************
+     * Populate sections & auto-scroll fix
+     ************************************************************************/
+    // Add inner wrapper and duplicate for smooth loop
+    function applyAutoScroll(sectionElement) {
+      // create wrapper
+      const items = Array.from(sectionElement.children).filter(n => !n.classList.contains('auto-scroll-inner'));
+      if (items.length === 0) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'auto-scroll-inner';
+
+      items.forEach(i => wrapper.appendChild(i));
+      // duplicate
+      wrapper.innerHTML += wrapper.innerHTML;
+      // clear section and append wrapper
+      sectionElement.innerHTML = '';
+      sectionElement.appendChild(wrapper);
+    }
+
+    function clearAndInjectRaw(sectionEl, cards) {
+      sectionEl.innerHTML = '';
+      cards.forEach(c => sectionEl.appendChild(c));
+    }
+
+    async function populateAll() {
+      // fetches in parallel
+      const [animeData, mangaData, moviesData, seriesData] = await Promise.all([
+        fetchTopAnime(8),
+        fetchTopManga(8),
+        fetchTMDBTrending('movie', 8),
+        fetchTMDBTrending('tv', 8)
+      ]);
+
+      // create cards
+      const animeCards = animeData.map(a => createContentCard({
+        title: a.title, poster: a.poster, score: a.score, type: 'Anime', year: a.year, snippet: a.synopsis || a.snippet || ''
+      }));
+      const mangaCards = mangaData.map(m => createContentCard({
+        title: m.title, poster: m.poster, score: m.score, type: 'Manhwa', year: m.year, snippet: m.synopsis || m.snippet || ''
+      }));
+      const movieCards = moviesData.map(m => createContentCard({
+        title: m.title, poster: m.poster, score: m.score, type: 'Movie', year: m.year, snippet: m.overview || m.snippet || ''
+      }));
+      const seriesCards = seriesData.map(s => createContentCard({
+        title: s.title, poster: s.poster, score: s.score, type: 'Series', year: s.year, snippet: s.overview || s.snippet || ''
+      }));
+
+      // Reviews: show a combination
+      const reviews = [...movieCards.slice(0, 3), ...animeCards.slice(0, 3)];
+      const reviewsEl = document.getElementById('reviews-scroll');
+      clearAndInjectRaw(reviewsEl, reviews);
+
+      // inject to sections (raw items first — wrapper will duplicate)
+      const animeEl = document.getElementById('anime-scroll');
+      const manhwaEl = document.getElementById('manhwa-scroll');
+      const moviesEl = document.getElementById('movies-scroll');
+      const seriesEl = document.getElementById('series-scroll');
+
+      clearAndInjectRaw(animeEl, animeCards.length ? animeCards : fallback.anime.map(a => createContentCard(a)));
+      clearAndInjectRaw(manhwaEl, mangaCards.length ? mangaCards : fallback.manga.map(m => createContentCard(m)));
+      clearAndInjectRaw(moviesEl, movieCards.length ? movieCards : fallback.movies.map(m => createContentCard(m)));
+      clearAndInjectRaw(seriesEl, seriesCards.length ? seriesCards : fallback.series.map(s => createContentCard(s)));
+
+      // small delay then apply auto-scroll wrapper to each horizontal section
+      setTimeout(() => {
+        document.querySelectorAll('.h-scroll-section').forEach(section => {
+          // for reviews we don't auto-scroll if too short
+          const itemsCount = section.querySelectorAll('.content-card').length;
+          if (itemsCount > 1) applyAutoScroll(section);
+        });
+
+        // init tilt after DOM updates
+        initTilt();
+      }, 350);
+    }
+
+    /************************************************************************
+     * Slider (hero)
+     ************************************************************************/
+    const slides = document.getElementById('slides');
+    const dots = document.getElementById('dots');
+    let idx = 0, autoTimer = null;
+    function renderDots() {
+      dots.innerHTML = '';
+      const count = slides.children.length;
+      for (let i = 0; i < count; i++) {
+        const d = document.createElement('div');
+        d.className = 'dot' + (i === 0 ? ' active' : '');
+        d.dataset.index = i;
+        d.addEventListener('click', () => goTo(i));
+        dots.appendChild(d);
+      }
+    }
+    function goTo(i) { idx = i; update(); resetAuto(); }
+    function update() { slides.style.transform = `translateX(-${idx * 100}%)`; document.querySelectorAll('.dot').forEach((d, ii) => d.classList.toggle('active', ii === idx)); }
+    function next() { idx = (idx + 1) % slides.children.length; update(); }
+    function resetAuto() { clearInterval(autoTimer); autoTimer = setInterval(next, 4500); }
+    renderDots(); resetAuto();
+
+    /************************************************************************
+     * Trailer modal helpers
+     ************************************************************************/
+    const trailerModal = document.getElementById('trailer-modal');
+    const trailerFrame = document.getElementById('trailer-frame');
+
+    document.getElementById('play-trailer').addEventListener('click', () => {
+      trailerFrame.src = 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1';
+      trailerModal.classList.add('active'); trailerModal.setAttribute('aria-hidden', 'false');
+    });
+    document.getElementById('close-modal').addEventListener('click', () => { trailerFrame.src = ''; trailerModal.classList.remove('active'); trailerModal.setAttribute('aria-hidden', 'true'); });
+    trailerModal.addEventListener('click', (e) => { if (e.target === trailerModal) { trailerFrame.src = ''; trailerModal.classList.remove('active'); trailerModal.setAttribute('aria-hidden', 'true'); } });
+
+    async function openTrailerForItem(item) {
+      // Try TMDB search if we have an item that looks like a movie/series and TMDB token exists
+      try {
+        let youtubeKey = null;
+        // If item has a title + year try TMDB search (movie or tv)
+        if (item.title) {
+          // search both movie and tv endpoints and pick first match
+          const query = encodeURIComponent(item.title);
+          // try movie
+          let res = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${encodeURIComponent(TMDB_API_KEY)}&query=${query}`);
+          if (res.ok) {
+            const j = await res.json();
+            if (j.results && j.results.length) {
+              const match = j.results[0];
+              // fetch videos for matching type
+              const type = match.media_type === 'movie' ? 'movie' : (match.media_type === 'tv' ? 'tv' : null);
+              if (type && match.id) {
+                const vidRes = await fetch(`https://api.themoviedb.org/3/${type}/${match.id}/videos?api_key=${encodeURIComponent(TMDB_API_KEY)}`);
+                if (vidRes.ok) {
+                  const vj = await vidRes.json();
+                  const you = (vj.results || []).find(r => r.site === 'YouTube' && r.type === 'Trailer');
+                  if (you) youtubeKey = you.key;
+                }
+              }
+            }
+          }
+        }
+        if (youtubeKey) {
+          trailerFrame.src = `https://www.youtube.com/embed/${youtubeKey}?autoplay=1`;
+        } else {
+          // fallback to youtube search query embed
+          const q = encodeURIComponent((item.title || item.name || '') + ' trailer');
+          trailerFrame.src = `https://www.youtube.com/embed?listType=search&list=${q}&autoplay=1`;
+        }
+        trailerModal.classList.add('active');
+        trailerModal.setAttribute('aria-hidden', 'false');
+      } catch (e) {
+        console.warn('openTrailerForItem failed', e);
+        // fallback
+        trailerFrame.src = 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1';
+        trailerModal.classList.add('active'); trailerModal.setAttribute('aria-hidden', 'false');
+      }
+    }
+
+    /************************************************************************
+     * 3D tilt
+     ************************************************************************/
+    function initTilt() {
+      document.querySelectorAll('.tilt').forEach(el => {
+        // remove old listeners safely by cloning
+        const newEl = el.cloneNode(true);
+        el.parentNode.replaceChild(newEl, el);
+        newEl.addEventListener('mousemove', e => {
+          const rect = newEl.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width - 0.5;
+          const y = (e.clientY - rect.top) / rect.height - 0.5;
+          newEl.style.transform = `perspective(900px) rotateX(${(-y * 6)}deg) rotateY(${x * 8}deg) translateZ(6px)`;
+        });
+        newEl.addEventListener('mouseleave', () => { newEl.style.transform = 'translateZ(0)'; });
+      });
+    }
+
+    /************************************************************************
+     * Search quick demo
+     ************************************************************************/
+    document.getElementById('search-btn').addEventListener('click', async () => {
+      const q = document.getElementById('search').value.trim();
+      const scope = document.getElementById('scope').value;
+      if (!q) return alert('Try searching for "anime" or a title.');
+      // Simple behavior: if scope is Anime/Manhwa -> use Jikan search, else TMDB
+      try {
+        if (scope === 'Anime' || (scope === 'All' && q.toLowerCase().includes('anime'))) {
+          const res = await fetch(`${JIKAN_BASE}/anime?q=${encodeURIComponent(q)}&limit=1`);
+          if (res.ok) {
+            const j = await res.json();
+            if (j.data && j.data.length) {
+              const top = j.data[0];
+              location.hash = '#anime';
+              window.scrollTo({ top: document.getElementById('anime').offsetTop - 20, behavior: 'smooth' });
+              return;
+            }
+          }
+        }
+        // fallback: find in current injected content
+        const all = document.querySelectorAll('.content-card');
+        for (const c of all) {
+          if (c.innerText.toLowerCase().includes(q.toLowerCase())) {
+            c.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            c.classList.add('highlight');
+            setTimeout(() => c.classList.remove('highlight'), 1200);
+            return;
+          }
+        }
+        alert('No exact results found (try broader query).');
+      } catch (e) {
+        console.warn('search failed', e);
+        alert('Search error (see console).');
+      }
+    });
+
+    /* keyboard controls */
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') next();
+      if (e.key === 'ArrowLeft') { idx = (idx - 1 + slides.children.length) % slides.children.length; update(); resetAuto(); }
+      if (e.key === 'Escape') { trailerFrame.src = ''; trailerModal.classList.remove('active'); trailerModal.setAttribute('aria-hidden', 'true'); }
+    });
+
+    /************************************************************************
+     * Init on load
+     ************************************************************************/
+    document.addEventListener('DOMContentLoaded', async () => {
+      // populate sections from APIs
+      await populateAll();
+    });
+
+  </script>
+</body>
+
+</html>
