@@ -1,0 +1,3172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>User Profile - My-Animedia</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+
+
+/* Favorites Grid Styles */
+.fav-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 25px;
+  padding-bottom: 40px;
+}
+
+.fav-card {
+  background: rgba(30, 20, 50, 0.6);
+  border: 1px solid rgba(138, 43, 226, 0.15);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.fav-card:hover {
+  transform: translateY(-5px);
+  background: rgba(30, 20, 50, 0.9);
+  border-color: #8a2be2;
+  box-shadow: 0 10px 30px rgba(138, 43, 226, 0.15);
+}
+
+/* Image container with gradient border effect */
+.fav-img-wrapper {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  padding: 3px;
+  background: linear-gradient(45deg, #8a2be2, #ff6b6b);
+  margin-bottom: 15px;
+}
+
+.fav-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #0f1020; /* Matches background to create spacing */
+}
+
+.fav-name {
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.fav-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.05);
+  color: #b9c2d3;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Remove button on hover */
+.fav-remove {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #ff6b6b;
+  background: rgba(0,0,0,0.5);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.fav-card:hover .fav-remove {
+  opacity: 1;
+}
+
+
+   :root {
+    /* Theme from anime/movie pages */
+    --bg-1: #071025;
+    --bg-2: #0f1020;
+    --card: rgba(255, 255, 255, 0.05);
+    --glass: rgba(255, 255, 255, 0.04);
+    --neon: #8a2be2;
+    --accent: #ff6b6b; /* Changed to Red/Salmon */
+    --muted: #b9c2d3;
+    --glass-border: rgba(138, 43, 226, 0.12);
+    --glass-blur: 10px;
+    --shadow: 0 10px 30px rgba(2, 6, 23, 0.8);
+    --radius: 14px;
+    --transition: 300ms cubic-bezier(.2, .9, .3, 1);
+}
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+     font-family: 'Inter', 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+  /* Matches anime.html/movie.html exactly */
+  background: linear-gradient(180deg, var(--bg-1), var(--bg-2));
+  color: #e6eef8;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  min-height: 100vh;
+    }
+
+    /* --- Scrollbar --- */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-1); }
+    ::-webkit-scrollbar-thumb { background: var(--neon); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+    /* Header */
+    .profile-header {
+      position: sticky;
+      top: 12px;
+      z-index: 2000;
+      display: flex;
+      justify-content: center;
+      padding: 10px 0;
+    }
+
+    .profile-nav {
+      width: calc(100% - 40px);
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 14px 20px;
+      border-radius: 16px;
+      background: rgba(15, 16, 32, 0.8);
+      backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: #fff;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .nav-brand i {
+      font-size: 1.6rem;
+      color: var(--accent);
+      text-shadow: 0 0 20px rgba(192, 132, 252, 0.5);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .nav-link {
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      text-decoration: none;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.95rem;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: #fff;
+      background: linear-gradient(90deg, rgba(138, 43, 226, 0.2), rgba(192, 132, 252, 0.15));
+      box-shadow: 0 4px 20px rgba(138, 43, 226, 0.2);
+    }
+
+    .logout-btn {
+      padding: 10px 18px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 107, 107, 0.3);
+      background: rgba(255, 107, 107, 0.1);
+      color: #ff6b6b;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.95rem;
+    }
+
+    .logout-btn:hover {
+      background: rgba(255, 107, 107, 0.2);
+      border-color: rgba(255, 107, 107, 0.5);
+      box-shadow: 0 4px 20px rgba(255, 107, 107, 0.2);
+    }
+
+    /* Main container */
+    .profile-container {
+      max-width: 1400px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    /* Profile header section */
+    .profile-header-section {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 30px;
+      margin-bottom: 50px;
+      align-items: start;
+    }
+
+    /* Profile card */
+    .profile-card {
+      padding: 30px;
+      border-radius: var(--radius);
+      background: rgba(30, 20, 50, 0.7);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(var(--glass-blur));
+      box-shadow: var(--shadow);
+      animation: slideIn 0.6s ease;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .profile-avatar {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--neon), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: #fff;
+      box-shadow: 0 10px 30px rgba(138, 43, 226, 0.4);
+      margin: 0 auto 20px;
+    }
+
+    .profile-name {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .profile-email {
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+    }
+
+    .profile-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid rgba(138, 43, 226, 0.2);
+    }
+
+    .meta-item {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .meta-item span {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* Stats section */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-category {
+      padding: 25px;
+      background: linear-gradient(135deg, rgba(138, 43, 226, 0.15), rgba(120, 80, 200, 0.1));
+      border: 1px solid rgba(138, 43, 226, 0.2);
+      border-radius: var(--radius);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-category::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--neon), var(--accent));
+    }
+
+    .stat-category:hover {
+      border-color: rgba(192, 132, 252, 0.4);
+      box-shadow: 0 12px 40px rgba(138, 43, 226, 0.2);
+      transform: translateY(-5px);
+    }
+
+    .stat-category h3 {
+      font-size: 1.3rem;
+      color: #fff;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .stat-category h3 i {
+      color: var(--accent);
+    }
+
+    .stats-table {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      font-size: 0.9rem;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(138, 43, 226, 0.1);
+    }
+
+    .stat-label { color: var(--muted); }
+    .stat-value { color: #fff; font-weight: 700; }
+
+    .stat-large {
+      grid-column: span 2;
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: none;
+      font-size: 1.1rem;
+      border-top: 1px solid rgba(138, 43, 226, 0.1);
+      margin-top: 5px;
+    }
+
+    .stat-large .stat-value {
+      font-size: 1.4rem;
+      background: linear-gradient(90deg, var(--accent), #8a2be2);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    /* Quick Actions */
+    .quick-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 25px;
+    }
+
+    .action-btn {
+      padding: 16px 20px;
+      border-radius: 12px;
+      border: none;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-align: center;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .action-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .action-explore { background: linear-gradient(90deg, var(--accent), #a855f7); }
+    .action-delete { background: linear-gradient(90deg, #ef4444, #dc2626); }
+    
+    /* New Action Buttons */
+    .action-overview { background: linear-gradient(90deg, #6366f1, #8b5cf6); }
+    .action-reviews { background: linear-gradient(90deg, #f59e0b, #d97706); }
+    .action-mylist { background: linear-gradient(90deg, #10b981, #059669); }
+    .action-settings { background: linear-gradient(90deg, #8b5cf6, #7c3aed); }
+
+    /* New Full Screen Sections */
+    .full-screen-section {
+      position: fixed;
+      inset: 0;
+      background: var(--bg-1);
+      z-index: 3500;
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+      animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .full-screen-section.active { display: flex; }
+
+    .section-header {
+      position: sticky;
+      top: 0;
+      background: rgba(15, 11, 31, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(138, 43, 226, 0.2);
+      z-index: 10;
+      min-height: 80px;
+    }
+
+    .back-btn {
+      background: transparent; 
+      border: 1px solid rgba(255,255,255,0.1); 
+      color: #fff;
+      padding: 10px 20px; 
+      border-radius: 10px; 
+      cursor: pointer; 
+      display: flex; 
+      align-items: center; 
+      gap: 8px; 
+      font-weight: 600;
+      transition: var(--transition);
+    }
+    
+    .back-btn:hover { 
+      background: rgba(255,255,255,0.05); 
+      border-color: var(--accent);
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--neon), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-align: center;
+      flex: 1;
+    }
+
+    .section-content {
+      flex: 1;
+      padding: 40px;
+      max-width: 1600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Overview Section Content */
+    .overview-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .overview-stat-card {
+      padding: 30px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(138, 43, 226, 0.15), rgba(120, 80, 200, 0.1));
+      border: 1px solid rgba(138, 43, 226, 0.2);
+      transition: var(--transition);
+      text-align: center;
+    }
+
+    .overview-stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(138, 43, 226, 0.2);
+    }
+
+    .overview-stat-icon {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      color: var(--accent);
+    }
+
+    .overview-stat-title {
+      font-size: 1.2rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .overview-stat-value {
+      font-size: 3rem;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1;
+    }
+
+    .overview-stat-subtitle {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-top: 10px;
+    }
+
+    .recent-activity {
+      margin-top: 40px;
+    }
+
+    .activity-title {
+      font-size: 1.8rem;
+      color: #fff;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid rgba(138, 43, 226, 0.3);
+    }
+
+    .activity-list {
+      display: grid;
+      gap: 15px;
+    }
+
+    .activity-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: var(--radius);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: var(--transition);
+    }
+
+    .activity-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(138, 43, 226, 0.3);
+    }
+
+    .activity-icon {
+      font-size: 1.5rem;
+      color: var(--accent);
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(138, 43, 226, 0.1);
+      border-radius: 12px;
+    }
+
+    .activity-content {
+      flex: 1;
+    }
+
+    .activity-text {
+      color: #fff;
+      font-weight: 500;
+      margin-bottom: 5px;
+    }
+
+    .activity-time {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    /* Reviews Section Content */
+    .reviews-section-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+      gap: 25px;
+      padding: 20px 0;
+    }
+
+    .review-section-card {
+      padding: 30px;
+      border-radius: var(--radius);
+      background: rgba(30, 20, 50, 0.7);
+      border: 1px solid var(--glass-border);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .review-section-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--neon), var(--accent));
+    }
+
+    .review-section-card:hover {
+      border-color: rgba(138, 43, 226, 0.4);
+      box-shadow: 0 15px 40px rgba(138, 43, 226, 0.2);
+      transform: translateY(-5px);
+    }
+
+    .review-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .review-section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #fff;
+      flex: 1;
+    }
+
+    .review-section-category {
+      padding: 6px 15px;
+      background: linear-gradient(135deg, rgba(192, 132, 252, 0.2), rgba(138, 43, 226, 0.15));
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .review-section-rating {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 20px;
+    }
+
+    .review-section-star {
+      color: #FFD700;
+      font-size: 1.1rem;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+
+    .review-section-text {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 25px;
+      max-height: 200px;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+
+    .review-section-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 20px;
+      border-top: 1px solid rgba(138, 43, 226, 0.1);
+    }
+
+    .review-section-item {
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .review-section-date {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .review-section-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .review-section-btn {
+      padding: 8px 16px;
+      border: none;
+      background: rgba(138, 43, 226, 0.1);
+      color: var(--accent);
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: var(--transition);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .review-section-btn:hover {
+      color: #fff;
+      background: rgba(192, 132, 252, 0.2);
+    }
+
+    /* MyList Section Content */
+    .mylist-section-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 30px;
+      padding: 20px 0;
+    }
+
+    .mylist-section-category {
+      padding: 35px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(138, 43, 226, 0.15), rgba(120, 80, 200, 0.1));
+      border: 1px solid rgba(138, 43, 226, 0.2);
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      display: block;
+      color: inherit;
+    }
+
+    .mylist-section-category::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--neon), var(--accent));
+    }
+
+    .mylist-section-category:hover {
+      border-color: rgba(192, 132, 252, 0.4);
+      box-shadow: 0 20px 50px rgba(138, 43, 226, 0.3);
+      transform: translateY(-10px);
+    }
+
+    .mylist-section-icon {
+      font-size: 4rem;
+      margin-bottom: 25px;
+      color: var(--accent);
+      text-shadow: 0 0 40px rgba(192, 132, 252, 0.6);
+    }
+
+    .mylist-section-name {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+
+    .mylist-section-count {
+      font-size: 1.1rem;
+      color: var(--muted);
+      margin-bottom: 25px;
+      font-weight: 600;
+    }
+
+    .mylist-section-button {
+      padding: 12px 25px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 1rem;
+      display: inline-block;
+    }
+
+    .mylist-section-category:hover .mylist-section-button {
+      background: linear-gradient(90deg, var(--neon), #9d4edd);
+      border-color: transparent;
+    }
+
+    /* Settings Section Content */
+    .settings-section-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      padding: 20px 0;
+    }
+
+    .settings-section-card {
+      padding: 35px;
+      border-radius: var(--radius);
+      background: rgba(30, 20, 50, 0.7);
+      border: 1px solid var(--glass-border);
+      transition: var(--transition);
+    }
+
+    .settings-section-card:hover {
+      border-color: rgba(138, 43, 226, 0.4);
+      box-shadow: 0 15px 40px rgba(138, 43, 226, 0.15);
+    }
+
+    .settings-section-title {
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 30px;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid rgba(138, 43, 226, 0.2);
+    }
+
+    .settings-section-title i {
+      color: var(--accent);
+      font-size: 1.3rem;
+    }
+
+    .settings-section-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(138, 43, 226, 0.1);
+      transition: var(--transition);
+    }
+
+    .settings-section-item:hover {
+      background: rgba(138, 43, 226, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      border-radius: 8px;
+    }
+
+    .settings-section-item:last-child {
+      border-bottom: none;
+    }
+
+    .settings-section-label {
+      color: var(--muted);
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    .settings-section-description {
+      font-size: 0.85rem;
+      color: rgba(185, 194, 211, 0.7);
+      margin-top: 5px;
+      max-width: 300px;
+    }
+
+    .toggle-switch {
+      width: 60px;
+      height: 32px;
+      border-radius: 16px;
+      background: rgba(138, 43, 226, 0.3);
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      flex-shrink: 0;
+    }
+    
+    .toggle-switch.active {
+      background: var(--accent);
+    }
+    
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #fff;
+      top: 3px;
+      left: 3px;
+      transition: var(--transition);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    
+    .toggle-switch.active::after {
+      left: 31px;
+    }
+
+    /* Profile Tabs Removed - Styles for New Navigation */
+    .profile-navigation {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    /* Forms & Modal Inputs */
+    .form-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 25px; }
+    .form-label { font-weight: 600; color: #fff; font-size: 1rem; }
+    .form-input, .form-select, .form-textarea {
+      padding: 14px 16px; border-radius: 12px; background: rgba(20, 10, 40, 0.7); border: 1px solid rgba(138, 43, 226, 0.3);
+      outline: none; color: #fff; font-weight: 500; font-size: 1rem; transition: var(--transition); font-family: inherit;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { background: rgba(30, 15, 60, 0.8); border-color: var(--accent); box-shadow: 0 0 20px rgba(138, 43, 226, 0.2); }
+    .form-textarea { resize: vertical; min-height: 150px; }
+    .rating-input { display: flex; gap: 15px; margin-bottom: 25px; justify-content: center; }
+    .star-input { font-size: 2.5rem; cursor: pointer; color: rgba(255, 215, 0, 0.4); transition: all 0.2s ease; }
+    .star-input:hover, .star-input.active { color: #FFD700; transform: scale(1.3); text-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+    
+    .submit-btn {
+      width: 100%; padding: 16px 20px; border-radius: 12px; border: none; background: linear-gradient(90deg, var(--neon), #9d4edd); color: #fff;
+      font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: var(--transition); box-shadow: 0 8px 30px rgba(138, 43, 226, 0.3);
+    }
+    .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(138, 43, 226, 0.5); }
+
+    /* Modal Wrapper */
+    .modal { 
+      position: fixed; 
+      inset: 0; 
+      display: none; 
+      align-items: center; 
+      justify-content: center; 
+      background: rgba(10, 5, 30, 0.95); 
+      z-index: 4500; 
+      padding: 20px; 
+      backdrop-filter: blur(5px); 
+    }
+    
+    .modal.active { 
+      display: flex; 
+    }
+    
+    .modal-content-sm { 
+      background: rgba(30, 20, 50, 0.95); 
+      border: 1px solid var(--glass-border); 
+      border-radius: var(--radius); 
+      padding: 40px; 
+      max-width: 600px; 
+      width: 100%; 
+      animation: slideUp 0.4s ease; 
+      max-height: 90vh; 
+      overflow-y: auto; 
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); 
+    }
+    
+    .modal-header { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      margin-bottom: 30px; 
+    }
+    
+    .modal-title { 
+      font-size: 1.5rem; 
+      font-weight: 800; 
+      background: linear-gradient(90deg, var(--neon), var(--accent)); 
+      -webkit-background-clip: text; 
+      background-clip: text; 
+      color: transparent; 
+    }
+
+    /* FULL SCREEN OVERLAY (List View) */
+    .full-screen-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--bg-1);
+      z-index: 4000;
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+      animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .full-screen-overlay.active { display: flex; }
+
+    .overlay-header {
+      position: sticky;
+      top: 0;
+      background: rgba(15, 11, 31, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 15px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(138, 43, 226, 0.2);
+      z-index: 10;
+    }
+
+    .list-view-tabs {
+      display: flex; 
+      gap: 15px; 
+      margin: 20px 30px; 
+      border-bottom: 1px solid rgba(255,255,255,0.1); 
+      padding-bottom: 10px; 
+      overflow-x: auto;
+    }
+    
+    .list-view-tab {
+      background: transparent; 
+      border: none; 
+      color: var(--muted); 
+      font-size: 1rem; 
+      font-weight: 600; 
+      cursor: pointer; 
+      padding: 8px 12px; 
+      white-space: nowrap;
+      transition: var(--transition);
+      border-radius: 6px;
+    }
+    
+    .list-view-tab.active { 
+      color: var(--accent); 
+      background: rgba(138, 43, 226, 0.1);
+      border-bottom: 2px solid var(--accent); 
+    }
+    
+    .list-view-tab:hover:not(.active) {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .list-table-container { padding: 0 30px 40px; flex: 1; }
+    
+    .list-table { width: 100%; border-collapse: collapse; color: #fff; }
+    .list-table th { text-align: left; padding: 15px; color: var(--muted); font-size: 0.9rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .list-table td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: middle; }
+    .list-table tr:hover { background: rgba(138, 43, 226, 0.05); }
+    
+    .item-thumb { width: 50px; height: 70px; object-fit: cover; border-radius: 4px; }
+    .item-title { font-weight: 700; color: #fff; text-decoration: none; display: block; }
+    .item-title:hover { color: var(--accent); }
+    .tag-edit { color: #4caf50; cursor: pointer; font-size: 0.85rem; }
+
+    /* Unified Detail Modal */
+    .detail-modal {
+      position: fixed; 
+      inset: 0; 
+      background: rgba(0,0,0,0.95); 
+      z-index: 5000; 
+      display: none; 
+      align-items: center; 
+      justify-content: center; 
+      padding: 20px;
+      backdrop-filter: blur(5px);
+    }
+    
+    .detail-modal.active { 
+      display: flex; 
+    }
+    
+    .detail-content {
+      width: 90%; 
+      max-width: 900px; 
+      max-height: 90vh; 
+      background: #1a162b; 
+      border: 1px solid var(--glass-border); 
+      border-radius: 16px; 
+      overflow-y: auto; 
+      padding: 30px; 
+      position: relative;
+      display: grid; 
+      grid-template-columns: 250px 1fr; 
+      gap: 30px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+    }
+    
+    .detail-close { 
+      position: absolute; 
+      top: 20px; 
+      right: 20px; 
+      background: rgba(0, 0, 0, 0.7); 
+      border: 1px solid rgba(255,255,255,0.1); 
+      color: #fff; 
+      font-size: 1.2rem; 
+      cursor: pointer; 
+      z-index: 1; 
+      width: 40px; 
+      height: 40px; 
+      border-radius: 50%; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      transition: var(--transition);
+    }
+    
+    .detail-close:hover {
+      background: rgba(138, 43, 226, 0.7);
+      border-color: var(--neon);
+    }
+
+    /* Character Detail Modal */
+    .character-detail-content {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 30px;
+      padding: 20px;
+    }
+    
+    .character-main-info {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .character-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .character-meta-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .character-meta-label {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    
+    .character-meta-value {
+      color: #fff;
+      font-weight: 600;
+      text-align: right;
+    }
+
+    /* Empty States */
+    .empty-state { 
+      text-align: center; 
+      padding: 80px 20px; 
+      color: var(--muted); 
+      grid-column: 1/-1; 
+    }
+    
+    .empty-icon { 
+      font-size: 4rem; 
+      margin-bottom: 25px; 
+      color: rgba(138, 43, 226, 0.4); 
+    }
+    
+    .empty-text { 
+      font-size: 1.5rem; 
+      margin-bottom: 30px; 
+      color: #fff;
+      font-weight: 600;
+    }
+    
+    .empty-subtext {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 40px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .empty-btn {
+      padding: 16px 32px;
+      border-radius: 12px;
+      background: linear-gradient(90deg, var(--neon), #9d4edd);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 1.1rem;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .empty-btn:hover { 
+      transform: translateY(-3px); 
+      box-shadow: 0 15px 35px rgba(138, 43, 226, 0.4); 
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .profile-header-section { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    
+    @media (max-width: 900px) {
+      .reviews-section-content { grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); }
+      .settings-section-grid { grid-template-columns: 1fr; }
+      .mylist-section-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+      .detail-content { grid-template-columns: 1fr; }
+      .character-detail-content { grid-template-columns: 1fr; }
+      .section-content { padding: 25px; }
+      .section-header { padding: 15px 25px; }
+    }
+    
+    @media (max-width: 768px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .overview-stats-grid { grid-template-columns: 1fr; }
+      .reviews-section-content { grid-template-columns: 1fr; }
+      .mylist-section-grid { grid-template-columns: 1fr; }
+      .profile-nav { flex-direction: column; gap: 15px; }
+      .nav-links { width: 100%; justify-content: center; }
+    }
+    
+    @media (max-width: 600px) {
+      .list-table thead { display: none; }
+      .list-table tr { display: flex; flex-direction: column; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 15px 0; }
+      .list-table td { border: none; padding: 5px 0; }
+      .section-title { font-size: 1.5rem; }
+      .review-section-card { padding: 20px; }
+      .mylist-section-category { padding: 25px; }
+      .settings-section-card { padding: 25px; }
+      .overview-stat-value { font-size: 2.5rem; }
+    }
+    
+    @media (max-width: 400px) {
+      .review-section-card { padding: 15px; }
+      .section-content { padding: 15px; }
+      .profile-container { padding: 0 15px; }
+    }
+
+    /* Animations */
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-header">
+    <div class="profile-nav">
+      <a href="index.html" class="nav-brand">
+        <i class="fas fa-play-circle"></i>
+        <span>My-Animedia</span>
+      </a>
+
+      <div class="nav-links">
+        <button class="logout-btn" onclick="handleLogout()">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function loadProfile() {
+      const token = localStorage.getItem('token');
+      if (!token) return window.location.href = 'auth.html';
+      try {
+        const res = await fetch('/api/auth/me', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (!res.ok) {
+          localStorage.removeItem('token');
+          return window.location.href = 'auth.html';
+        }
+        const user = await res.json();
+        document.getElementById('profile-name').textContent = user.name || 'User';
+        document.getElementById('profile-email').textContent = user.email || '';
+        document.getElementById('profile-category').textContent = user.favorite_category || '—';
+        const joined = new Date(user.created_at).toLocaleDateString();
+        document.getElementById('profile-joined').textContent = joined;
+        // avatar initial
+        const avatar = document.getElementById('profile-avatar');
+        avatar.textContent = user.name ? user.name.split(' ').map(n=>n[0]).slice(0,2).join('') : '👤';
+      } catch (err) {
+        console.error(err);
+        localStorage.removeItem('token');
+        window.location.href = 'auth.html';
+      }
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = 'auth.html';
+    }
+
+    window.addEventListener('DOMContentLoaded', loadProfile);
+  </script>
+  <script>
+    // Sync profile data from server into localStorage so existing UI works unchanged.
+    async function syncProfileFromServer() {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        // Fetch reviews
+        try {
+          const r = await fetch('/api/reviews/me', { headers: { Authorization: `Bearer ${token}` } });
+          if (r.ok) {
+            const reviews = await r.json();
+            // store under ev_reviews for compatibility (UI may read this key)
+            localStorage.setItem('ev_reviews', JSON.stringify(reviews));
+          }
+        } catch (e) { console.warn('Failed to fetch reviews', e); }
+
+        // Fetch favorites
+        try {
+          const f = await fetch('/api/favorites/me', { headers: { Authorization: `Bearer ${token}` } });
+          if (f.ok) {
+            const favs = await f.json();
+            // existing UI expects ev_favorite_characters array
+            localStorage.setItem('ev_favorite_characters', JSON.stringify(favs.map(x => ({ id: x.id, name: (x.meta && x.meta.name) || '', image_url: x.meta && x.meta.image_url ? x.meta.image_url : x.meta && x.meta.profile_path ? x.meta.profile_path : null, source: x.item_type, meta: x.meta }))));
+          }
+        } catch (e) { console.warn('Failed to fetch favorites', e); }
+
+        // Fetch lists
+        try {
+          const l = await fetch('/api/lists/me', { headers: { Authorization: `Bearer ${token}` } });
+          if (l.ok) {
+            const lists = await l.json();
+            // Convert grouped lists into ev_my_${type}_list shape where possible
+            // For simplicity, write each list_key directly under localStorage so existing renderers can pick them up
+            Object.keys(lists).forEach(key => {
+              // key like 'anime:watching' -> ev_my_anime_list
+              const parts = key.split(':');
+              let storageKey = key;
+              if (parts.length === 2) storageKey = `ev_my_${parts[0]}_list`;
+              // convert items to array grouped by status if needed
+              const arr = {};
+              lists[key].forEach(entry => {
+                // attempt to derive status from list_key second part or default to 'planned'
+                const status = parts[1] || 'planned';
+                arr[status] = arr[status] || [];
+                arr[status].push(entry.item);
+              });
+              localStorage.setItem(storageKey, JSON.stringify(arr));
+            });
+          }
+        } catch (e) { console.warn('Failed to fetch lists', e); }
+
+        // Trigger UI refresh if functions exist
+        try { if (typeof loadAllStatistics === 'function') loadAllStatistics(); } catch(e){}
+        try { if (typeof loadReviewsContent === 'function') loadReviewsContent(); } catch(e){}
+        try { if (typeof loadMyListContent === 'function') loadMyListContent(); } catch(e){}
+      } catch (err) {
+        console.error('Profile sync failed', err);
+      }
+    }
+
+    // Run sync on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(syncProfileFromServer, 300); // small delay to let page init
+    });
+  </script>
+
+  <div class="profile-container">
+    <div class="profile-header-section">
+      <div class="profile-card">
+        <div class="profile-avatar" id="profile-avatar">👤</div>
+        <div class="profile-name" id="profile-name">Loading...</div>
+        <div class="profile-email" id="profile-email">user@example.com</div>
+        <div class="profile-meta">
+          <div class="meta-item">Favorite: <span id="profile-category">Loading...</span></div>
+          <div class="meta-item">Member since: <span id="profile-joined">Loading...</span></div>
+        </div>
+        
+        <div class="profile-navigation">
+          <button class="action-btn action-explore" onclick="window.location.href='index.html'">
+            <i class="fas fa-search"></i> Explore Content
+          </button>
+          
+          <button class="action-btn action-overview" onclick="openFullScreenSection('overview')">
+            <i class="fas fa-chart-bar"></i> Overview
+          </button>
+          
+          <button class="action-btn action-reviews" onclick="openFullScreenSection('reviews')">
+            <i class="fas fa-star"></i> My Reviews
+          </button>
+          
+          <button class="action-btn action-mylist" onclick="openFullScreenSection('mylist')">
+            <i class="fas fa-list"></i> MyList
+          </button>
+          
+          <button class="action-btn action-settings" onclick="openFullScreenSection('settings')">
+            <i class="fas fa-cog"></i> Settings
+          </button>
+        </div>
+        
+        <div class="quick-actions">
+          <button class="action-btn action-review" onclick="openAddReviewModal()">
+            <i class="fas fa-pen"></i> Write Review
+          </button>
+          <button class="action-btn action-delete" onclick="handleDeleteAccount()">
+            <i class="fas fa-trash"></i> Delete Account
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <div class="profile-card">
+          <h3 style="color: #fff; margin-bottom: 25px; font-size: 1.4rem;">
+            <i class="fas fa-chart-line"></i> Your Statistics
+          </h3>
+          
+          <div class="stats-grid">
+            <div class="stat-category">
+              <h3><i class="fas fa-ghost"></i> Anime</h3>
+              <div class="stats-table">
+                <div class="stat-row"><span class="stat-label">Watching:</span><span class="stat-value" id="anime-watching">0</span></div>
+                <div class="stat-row"><span class="stat-label">Completed:</span><span class="stat-value" id="anime-completed">0</span></div>
+                <div class="stat-row"><span class="stat-label">On Hold:</span><span class="stat-value" id="anime-onhold">0</span></div>
+                <div class="stat-row"><span class="stat-label">Dropped:</span><span class="stat-value" id="anime-dropped">0</span></div>
+                <div class="stat-row"><span class="stat-label">Planned:</span><span class="stat-value" id="anime-planned">0</span></div>
+                <div class="stat-large"><span class="stat-label">Total Entries:</span><span class="stat-value" id="anime-total">0</span></div>
+              </div>
+            </div>
+
+            <div class="stat-category">
+              <h3><i class="fas fa-film"></i> Movies</h3>
+              <div class="stats-table">
+                <div class="stat-row"><span class="stat-label">Watching:</span><span class="stat-value" id="movie-watching">0</span></div>
+                <div class="stat-row"><span class="stat-label">Completed:</span><span class="stat-value" id="movie-completed">0</span></div>
+                <div class="stat-row"><span class="stat-label">On Hold:</span><span class="stat-value" id="movie-onhold">0</span></div>
+                <div class="stat-row"><span class="stat-label">Dropped:</span><span class="stat-value" id="movie-dropped">0</span></div>
+                <div class="stat-row"><span class="stat-label">Planned:</span><span class="stat-value" id="movie-planned">0</span></div>
+                <div class="stat-large"><span class="stat-label">Total Entries:</span><span class="stat-value" id="movie-total">0</span></div>
+              </div>
+            </div>
+
+            <div class="stat-category">
+              <h3><i class="fas fa-tv"></i> Series</h3>
+              <div class="stats-table">
+                <div class="stat-row"><span class="stat-label">Watching:</span><span class="stat-value" id="series-watching">0</span></div>
+                <div class="stat-row"><span class="stat-label">Completed:</span><span class="stat-value" id="series-completed">0</span></div>
+                <div class="stat-row"><span class="stat-label">On Hold:</span><span class="stat-value" id="series-onhold">0</span></div>
+                <div class="stat-row"><span class="stat-label">Dropped:</span><span class="stat-value" id="series-dropped">0</span></div>
+                <div class="stat-row"><span class="stat-label">Planned:</span><span class="stat-value" id="series-planned">0</span></div>
+                <div class="stat-large"><span class="stat-label">Total Entries:</span><span class="stat-value" id="series-total">0</span></div>
+              </div>
+            </div>
+
+            <div class="stat-category">
+              <h3><i class="fas fa-book-open"></i> Manhwa</h3>
+              <div class="stats-table">
+                <div class="stat-row"><span class="stat-label">Reading:</span><span class="stat-value" id="manhwa-reading">0</span></div>
+                <div class="stat-row"><span class="stat-label">Completed:</span><span class="stat-value" id="manhwa-completed">0</span></div>
+                <div class="stat-row"><span class="stat-label">On Hold:</span><span class="stat-value" id="manhwa-onhold">0</span></div>
+                <div class="stat-row"><span class="stat-label">Dropped:</span><span class="stat-value" id="manhwa-dropped">0</span></div>
+                <div class="stat-row"><span class="stat-label">Planned:</span><span class="stat-value" id="manhwa-planned">0</span></div>
+                <div class="stat-large"><span class="stat-label">Total Entries:</span><span class="stat-value" id="manhwa-total">0</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Full Screen Sections -->
+    
+    <!-- Overview Section -->
+    <div class="full-screen-section" id="overview-section">
+      <header class="section-header">
+        <button class="back-btn" onclick="closeFullScreenSection()">
+          <i class="fas fa-arrow-left"></i> Back to Profile
+        </button>
+        <h2 class="section-title">Overview</h2>
+        <div style="width: 100px;"></div>
+      </header>
+      <div class="section-content">
+        <div class="overview-stats-grid" id="overview-stats-grid">
+          <!-- Dynamic content will be loaded here -->
+        </div>
+        
+        <div class="recent-activity">
+          <h3 class="activity-title">Recent Activity</h3>
+          <div class="activity-list" id="recent-activity-list">
+            <!-- Dynamic activity content will be loaded here -->
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Reviews Section -->
+    <div class="full-screen-section" id="reviews-section">
+      <header class="section-header">
+        <button class="back-btn" onclick="closeFullScreenSection()">
+          <i class="fas fa-arrow-left"></i> Back to Profile
+        </button>
+        <h2 class="section-title">My Reviews</h2>
+        <div style="width: 100px;"></div>
+      </header>
+      <div class="section-content">
+        <div class="reviews-section-content" id="reviews-section-content">
+          <!-- Dynamic reviews content will be loaded here -->
+        </div>
+      </div>
+    </div>
+    
+    <!-- MyList Section -->
+    <div class="full-screen-section" id="mylist-section">
+      <header class="section-header">
+        <button class="back-btn" onclick="closeFullScreenSection()">
+          <i class="fas fa-arrow-left"></i> Back to Profile
+        </button>
+        <h2 class="section-title">MyList</h2>
+        <div style="width: 100px;"></div>
+      </header>
+      <div class="section-content">
+        <div class="mylist-section-grid" id="mylist-section-grid">
+          <!-- Dynamic mylist content will be loaded here -->
+        </div>
+      </div>
+    </div>
+    
+    <!-- Settings Section -->
+    <div class="full-screen-section" id="settings-section">
+      <header class="section-header">
+        <button class="back-btn" onclick="closeFullScreenSection()">
+          <i class="fas fa-arrow-left"></i> Back to Profile
+        </button>
+        <h2 class="section-title">Settings</h2>
+        <div style="width: 100px;"></div>
+      </header>
+      <div class="section-content">
+        <div class="settings-section-grid" id="settings-section-grid">
+          <!-- Dynamic settings content will be loaded here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modals (unchanged) -->
+  <div class="modal" id="review-modal">
+    <div class="modal-content-sm">
+      <div class="modal-header">
+        <h2 class="modal-title">Write a Review</h2>
+        <button class="modal-close" onclick="closeAddReviewModal()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Title</label>
+        <input type="text" class="form-input" id="review-title" placeholder="Give your review a title...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Category</label>
+        <select class="form-select" id="review-category">
+          <option value="">Select category...</option>
+          <option value="anime">Anime</option>
+          <option value="movies">Movies</option>
+          <option value="series">TV Series</option>
+          <option value="manhwa">Manhwa</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Item Name</label>
+        <input type="text" class="form-input" id="review-item" placeholder="Enter title...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Rating</label>
+        <div class="rating-input" id="rating-stars">
+          <span class="star-input" onclick="setRating(1)">★</span>
+          <span class="star-input" onclick="setRating(2)">★</span>
+          <span class="star-input" onclick="setRating(3)">★</span>
+          <span class="star-input" onclick="setRating(4)">★</span>
+          <span class="star-input" onclick="setRating(5)">★</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Your Review</label>
+        <textarea class="form-textarea" id="review-text" placeholder="Share your thoughts..."></textarea>
+      </div>
+      <button class="submit-btn" onclick="submitReview()">Submit Review</button>
+    </div>
+  </div>
+
+  <!-- List View Overlay (unchanged) -->
+  <div id="full-list-view" class="full-screen-overlay">
+    <header class="overlay-header">
+      <button class="back-btn" onclick="closeListModal()"><i class="fas fa-arrow-left"></i> Back</button>
+      <h2 id="list-view-title" style="color:#fff; margin:0; font-size:1.5rem;">My List</h2>
+      <div style="width:100px"></div>
+    </header>
+    <div class="list-view-tabs" id="list-view-tabs-container"></div>
+    <div class="list-table-container">
+      <table class="list-table">
+        <thead>
+          <tr>
+            <th style="width:50px">#</th>
+            <th style="width:80px">Image</th>
+            <th>Title</th>
+            <th>Score</th>
+            <th>Type</th>
+            <th>Progress</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="list-table-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Detail Modals (unchanged) -->
+  <div class="detail-modal" id="unified-modal">
+    <div class="detail-content">
+      <button class="detail-close" onclick="closeUnifiedModal()"><i class="fas fa-times"></i></button>
+      <div style="text-align:center;">
+        <img id="um-poster" src="" alt="Poster" style="width:100%; border-radius:12px; box-shadow:0 10px 40px rgba(0,0,0,0.5);">
+        <div style="margin-top:20px; font-size:2rem; font-weight:800; color:#FFD700;">
+          <span id="um-score"></span> <span style="font-size:1rem; color:var(--muted); font-weight:400;">/ 10</span>
+        </div>
+        <div id="um-status" style="margin-top:10px; color:var(--accent); font-weight:600;"></div>
+      </div>
+      <div>
+        <h1 id="um-title" style="color:#fff; font-size:2.5rem; margin-bottom:10px; line-height:1.2;">Title</h1>
+        <div id="um-meta" style="color:var(--muted); margin-bottom:20px;">Type • Year</div>
+        <div style="display:flex; gap:10px; margin-bottom:25px;" id="um-genres"></div>
+        <p id="um-synopsis" style="color:#ddd; line-height:1.7; margin-bottom:30px;">Synopsis...</p>
+        
+        <div style="background:rgba(255,255,255,0.05); padding:20px; border-radius:12px;">
+          <h3 style="color:#fff; margin-bottom:15px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px;">Your Progress</h3>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+             <div><span style="color:var(--muted)">Status:</span> <span id="um-user-status" style="color:#fff; font-weight:600"></span></div>
+             <div><span style="color:var(--muted)">Your Score:</span> <span id="um-user-score" style="color:gold; font-weight:600"></span></div>
+             <div style="grid-column:1/-1; color:var(--muted); font-style:italic;" id="um-user-notes"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="detail-modal" id="character-detail-modal">
+    <div class="detail-content">
+      <button class="detail-close" onclick="closeCharacterDetailModal()"><i class="fas fa-times"></i></button>
+      <div class="character-detail-content">
+        <div style="text-align:center;">
+          <img id="char-detail-img" src="" alt="Character" style="width:100%; border-radius:12px; box-shadow:0 10px 40px rgba(0,0,0,0.5);">
+          <div style="margin-top:20px; font-size:2rem; font-weight:800; color:#FFD700;">
+            <span id="char-detail-rating">★</span>
+          </div>
+        </div>
+        <div>
+          <h1 id="char-detail-name" style="color:#fff; font-size:2.5rem; margin-bottom:10px; line-height:1.2;">Character Name</h1>
+          <div id="char-detail-role" style="color:var(--accent); font-weight:600; margin-bottom:20px; font-size:1.2rem;"></div>
+          
+          <div class="character-meta">
+            <div class="character-meta-item">
+              <span class="character-meta-label">From:</span>
+              <span class="character-meta-value" id="char-detail-from">Unknown</span>
+            </div>
+            <div class="character-meta-item">
+              <span class="character-meta-label">Media Type:</span>
+              <span class="character-meta-value" id="char-detail-type">Unknown</span>
+            </div>
+            <div class="character-meta-item">
+              <span class="character-meta-label">Added On:</span>
+              <span class="character-meta-value" id="char-detail-added">Unknown</span>
+            </div>
+            <div class="character-meta-item">
+              <span class="character-meta-label">Notes:</span>
+              <span class="character-meta-value" id="char-detail-notes">None</span>
+            </div>
+          </div>
+          
+          <p id="char-detail-bio" style="color:#ddd; line-height:1.7; margin-top:20px;">Biography...</p>
+          
+          <div style="background:rgba(255,255,255,0.05); padding:20px; border-radius:12px; margin-top:30px;">
+            <h3 style="color:#fff; margin-bottom:15px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px;">Quick Actions</h3>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="btn" onclick="removeFromFavorites()" style="flex:1; padding:12px; background:rgba(255,107,107,0.1); border:1px solid rgba(255,107,107,0.3); color:#ff6b6b;">
+                <i class="fas fa-heart-broken"></i> Remove Favorite
+              </button>
+              <button class="btn" onclick="viewSourceMedia()" style="flex:1; padding:12px; background:rgba(138,43,226,0.1); border:1px solid rgba(138,43,226,0.3); color:var(--neon);">
+                <i class="fas fa-external-link-alt"></i> View Source
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<div id="favorites-view" class="full-screen-overlay">
+  <header class="overlay-header">
+    <button class="back-btn" onclick="closeFavoritesModal()">
+      <i class="fas fa-arrow-left"></i> Back to Profile
+    </button>
+    <h2 style="color:#fff; margin:0; font-size:1.5rem;">My Favorite Characters & Cast</h2>
+    <div style="width:100px"></div>
+  </header>
+
+  <div class="list-view-tabs">
+    <button class="list-view-tab active" onclick="filterFavorites('all', this)">All</button>
+    <button class="list-view-tab" onclick="filterFavorites('movie', this)">Movie Cast</button>
+    <button class="list-view-tab" onclick="filterFavorites('anime', this)">Anime Characters</button>
+    <button class="list-view-tab" onclick="filterFavorites('series', this)">Series Cast</button>
+  </div>
+
+  <div class="favorites-container" style="padding: 20px 40px;">
+    <div id="favorites-grid" class="fav-grid">
+      </div>
+  </div>
+</div>
+
+
+
+  <script>
+    let currentRating = 0;
+    const TMDB_API_KEY = '19e5492dc0311070d714f456eb6fb05f';
+    let currentListType = '';
+    let currentListFilter = 'all';
+    let currentFavoritesTab = 'all';
+    let currentCharacterDetail = null;
+    let currentFullScreenSection = '';
+
+    // --- Storage Keys ---
+    const STORAGE_KEYS = {
+      anime: 'ev_my_anime_list',
+      movie: 'ev_my_movie_list',
+      series: 'ev_my_series_list',
+      manhwa: 'ev_my_manhwa_list',
+      favorites: 'ev_favorite_characters',
+      reviews: 'ev_user_reviews'
+    };
+
+    // --- Load user profile ---
+    window.addEventListener('load', () => {
+      const currentUser = localStorage.getItem('currentUser');
+      if (!currentUser) { 
+        window.location.href = 'index.html'; 
+        return; 
+      }
+
+      const user = JSON.parse(currentUser);
+      const allUsers = JSON.parse(localStorage.getItem('users') || '[]');
+      const userData = allUsers.find(u => u.id === user.id) || user;
+
+      if (userData) {
+        document.getElementById('profile-name').textContent = userData.name || 'User';
+        document.getElementById('profile-email').textContent = userData.email || 'user@example.com';
+        document.getElementById('profile-category').textContent = (userData.category || 'anime').charAt(0).toUpperCase() + (userData.category || 'anime').slice(1);
+        document.getElementById('profile-avatar').textContent = (userData.name || 'U').charAt(0).toUpperCase();
+        
+        const joinDate = new Date(userData.createdAt || Date.now());
+        document.getElementById('profile-joined').textContent = joinDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+        loadAllStatistics();
+        loadUserReviews(userData.id || user.id);
+        
+        // Update last active time
+        updateLastActive();
+      }
+    });
+
+    // --- Enhanced Statistics Calculation ---
+    function getListStats(listKey, type = '') {
+      try {
+        const listData = JSON.parse(localStorage.getItem(listKey)) || {};
+        let totalEntries = 0;
+        let counts = { watching: 0, completed: 0, onhold: 0, dropped: 0, planned: 0, favorites: 0 };
+
+        if (type === 'manhwa') {
+          if (listData.reading) counts.watching = listData.reading.length;
+          if (listData.completed) counts.completed = listData.completed.length;
+          if (listData.onhold) counts.onhold = listData.onhold.length;
+          if (listData.dropped) counts.dropped = listData.dropped.length;
+          if (listData.planned) counts.planned = listData.planned.length;
+        } else {
+          if (listData.watching) counts.watching = listData.watching.length;
+          if (listData.completed) counts.completed = listData.completed.length;
+          if (listData.onhold) counts.onhold = listData.onhold.length;
+          if (listData.dropped) counts.dropped = listData.dropped.length;
+          if (listData.planned) counts.planned = listData.planned.length;
+        }
+
+        totalEntries = counts.watching + counts.completed + counts.onhold + counts.dropped + counts.planned;
+        
+        return { totalEntries, ...counts };
+      } catch (e) {
+        console.error(`Error reading ${listKey}:`, e);
+        return { totalEntries: 0, watching: 0, completed: 0, onhold: 0, dropped: 0, planned: 0 };
+      }
+    }
+
+    function getFavoritesStats() {
+      try {
+        const favorites = JSON.parse(localStorage.getItem(STORAGE_KEYS.favorites)) || [];
+        const movieCharacters = favorites.filter(fav => fav.type === 'movie' || fav.source === 'movie');
+        const animeCharacters = favorites.filter(fav => fav.type === 'anime' || fav.source === 'anime');
+        const seriesCharacters = favorites.filter(fav => fav.type === 'series' || fav.source === 'series');
+        
+        return {
+          total: favorites.length,
+          movie: movieCharacters.length,
+          anime: animeCharacters.length,
+          series: seriesCharacters.length
+        };
+      } catch (e) {
+        return { total: 0, movie: 0, anime: 0, series: 0 };
+      }
+    }
+
+    function getAllUserReviews(userId) {
+      try {
+        const allReviews = JSON.parse(localStorage.getItem(STORAGE_KEYS.reviews)) || [];
+        const userReviews = allReviews.filter(review => review.userId === userId);
+        return userReviews;
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function getRecentActivity() {
+      try {
+        const activities = [];
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+        const userId = currentUser.id || 'guest';
+        
+        // Get recent reviews
+        const allReviews = JSON.parse(localStorage.getItem(STORAGE_KEYS.reviews)) || [];
+        const userReviews = allReviews.filter(review => review.userId === userId);
+        
+        userReviews.slice(0, 5).forEach(review => {
+          activities.push({
+            type: 'review',
+            icon: 'fa-star',
+            text: `Reviewed "${review.itemName}"`,
+            time: new Date(review.createdAt),
+            color: '#f59e0b'
+          });
+        });
+        
+        // Get recently added favorites
+        const favorites = JSON.parse(localStorage.getItem(STORAGE_KEYS.favorites)) || [];
+        const recentFavorites = favorites.slice(0, 3);
+        
+        recentFavorites.forEach(fav => {
+          activities.push({
+            type: 'favorite',
+            icon: 'fa-heart',
+            text: `Added "${fav.name}" to favorites`,
+            time: new Date(fav.added_date || Date.now()),
+            color: '#ef4444'
+          });
+        });
+        
+        // Get recently added list items
+        const listTypes = ['anime', 'movie', 'series', 'manhwa'];
+        listTypes.forEach(type => {
+          const listData = JSON.parse(localStorage.getItem(STORAGE_KEYS[type])) || {};
+          Object.values(listData).forEach(arr => {
+            if (Array.isArray(arr)) {
+              arr.slice(0, 2).forEach(item => {
+                activities.push({
+                  type: 'list',
+                  icon: type === 'anime' ? 'fa-ghost' : type === 'movie' ? 'fa-film' : type === 'series' ? 'fa-tv' : 'fa-book-open',
+                  text: `Added "${item.title || item.name}" to ${type} list`,
+                  time: new Date(item.added_date || Date.now()),
+                  color: '#8b5cf6'
+                });
+              });
+            }
+          });
+        });
+        
+        // Sort by time and return top 10
+        return activities
+          .sort((a, b) => b.time - a.time)
+          .slice(0, 10);
+      } catch (e) {
+        console.error('Error getting recent activity:', e);
+        return [];
+      }
+    }
+
+    function updateLastActive() {
+      const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+      if (currentUser.id) {
+        currentUser.lastActive = new Date().toISOString();
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const userIndex = users.findIndex(u => u.id === currentUser.id);
+        if (userIndex !== -1) {
+          users[userIndex].lastActive = currentUser.lastActive;
+          localStorage.setItem('users', JSON.stringify(users));
+        }
+      }
+    }
+
+async function loadAllStatistics() {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    try {
+        // Fetch fresh list data from DB
+        const res = await fetch('/api/lists/me', {
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+        
+        if (!res.ok) throw new Error('Failed to fetch stats');
+        
+        // Backend returns data grouped like: { "anime:watching": [...], "movie:planned": [...] }
+        const lists = await res.json(); 
+
+        // Helper to count items safely
+        const getCount = (key) => lists[key] ? lists[key].length : 0;
+
+        // --- Update Anime Stats ---
+        const animeWatching = getCount('anime:watching');
+        const animeCompleted = getCount('anime:completed');
+        const animeOnhold = getCount('anime:onhold');
+        const animeDropped = getCount('anime:dropped');
+        const animePlanned = getCount('anime:planned');
+        
+        document.getElementById('anime-watching').textContent = animeWatching;
+        document.getElementById('anime-completed').textContent = animeCompleted;
+        document.getElementById('anime-onhold').textContent = animeOnhold;
+        document.getElementById('anime-dropped').textContent = animeDropped;
+        document.getElementById('anime-planned').textContent = animePlanned;
+        document.getElementById('anime-total').textContent = animeWatching + animeCompleted + animeOnhold + animeDropped + animePlanned;
+
+        // --- Update Movie Stats ---
+        const movieWatching = getCount('movie:watching');
+        const movieCompleted = getCount('movie:completed');
+        const movieOnhold = getCount('movie:onhold');
+        const movieDropped = getCount('movie:dropped');
+        const moviePlanned = getCount('movie:planned');
+
+        document.getElementById('movie-watching').textContent = movieWatching;
+        document.getElementById('movie-completed').textContent = movieCompleted;
+        document.getElementById('movie-onhold').textContent = movieOnhold;
+        document.getElementById('movie-dropped').textContent = movieDropped;
+        document.getElementById('movie-planned').textContent = moviePlanned;
+        document.getElementById('movie-total').textContent = movieWatching + movieCompleted + movieOnhold + movieDropped + moviePlanned;
+
+        // --- Update Series Stats ---
+        const seriesWatching = getCount('series:watching');
+        const seriesCompleted = getCount('series:completed');
+        const seriesOnhold = getCount('series:onhold');
+        const seriesDropped = getCount('series:dropped');
+        const seriesPlanned = getCount('series:planned');
+
+        document.getElementById('series-watching').textContent = seriesWatching;
+        document.getElementById('series-completed').textContent = seriesCompleted;
+        document.getElementById('series-onhold').textContent = seriesOnhold;
+        document.getElementById('series-dropped').textContent = seriesDropped;
+        document.getElementById('series-planned').textContent = seriesPlanned;
+        document.getElementById('series-total').textContent = seriesWatching + seriesCompleted + seriesOnhold + seriesDropped + seriesPlanned;
+
+        // --- Update Manhwa Stats ---
+        const manhwaReading = getCount('manhwa:reading');
+        const manhwaCompleted = getCount('manhwa:completed');
+        const manhwaOnhold = getCount('manhwa:onhold');
+        const manhwaDropped = getCount('manhwa:dropped');
+        const manhwaPlanned = getCount('manhwa:planned');
+
+        document.getElementById('manhwa-reading').textContent = manhwaReading;
+        document.getElementById('manhwa-completed').textContent = manhwaCompleted;
+        document.getElementById('manhwa-onhold').textContent = manhwaOnhold;
+        document.getElementById('manhwa-dropped').textContent = manhwaDropped;
+        document.getElementById('manhwa-planned').textContent = manhwaPlanned;
+        document.getElementById('manhwa-total').textContent = manhwaReading + manhwaCompleted + manhwaOnhold + manhwaDropped + manhwaPlanned;
+
+    } catch (err) {
+        console.error("Error loading stats:", err);
+    }
+}
+
+
+
+
+   
+    // --- Full Screen Sections ---
+    function openFullScreenSection(section) {
+      currentFullScreenSection = section;
+      const sectionElement = document.getElementById(`${section}-section`);
+      
+      if (sectionElement) {
+        // Load content for the specific section
+        loadSectionContent(section);
+        
+        // Show the section
+        sectionElement.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeFullScreenSection() {
+      const activeSection = document.querySelector('.full-screen-section.active');
+      if (activeSection) {
+        activeSection.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        currentFullScreenSection = '';
+      }
+    }
+
+    function loadSectionContent(section) {
+      switch(section) {
+        case 'overview':
+          loadOverviewContent();
+          break;
+        case 'reviews':
+          loadReviewsContent();
+          break;
+        case 'mylist':
+          loadMyListContent();
+          break;
+        case 'settings':
+          loadSettingsContent();
+          break;
+      }
+    }
+
+async function loadOverviewContent() {
+
+    const token = localStorage.getItem('token');
+    const statsGrid = document.getElementById('overview-stats-grid');
+    const activityList = document.getElementById('recent-activity-list');
+
+    if (!statsGrid || !activityList) return;
+
+    // ──────────── REVIEWS ────────────
+    let reviewCount = 0;
+    let avgRating = 0;
+
+    try {
+        const res = await fetch('/api/reviews/me', { 
+            headers: { Authorization: `Bearer ${token}` } 
+        });
+
+        if (res.ok) {
+            const reviews = await res.json();
+            reviewCount = reviews.length;
+
+            if (reviewCount > 0) {
+                const sum = reviews.reduce((acc, r) => acc + (r.rating || 0), 0);
+                avgRating = (sum / reviewCount).toFixed(1);
+            }
+        }
+
+    } catch (e) {
+        console.error("Error fetching reviews", e);
+    }
+
+
+    // ──────────── FAVORITES ────────────
+    let favCount = 0;
+
+    try {
+        const resFav = await fetch('/api/favorites/me', { 
+            headers: { Authorization: `Bearer ${token}` } 
+        });
+
+        if (resFav.ok) {
+            const favs = await resFav.json();
+            favCount = favs.length;
+        }
+
+    } catch (e) {
+        console.error("Error fetching favorites", e);
+    }
+
+
+// 3. FIX: Fetch Lists to Calculate "Total Items"
+    let totalItems = 0;
+    try {
+        const res = await fetch('/api/lists/me', { headers: { Authorization: `Bearer ${token}` } });
+        if (res.ok) {
+            const lists = await res.json();
+            // Sum up the length of every array in the lists object
+            totalItems = Object.values(lists).reduce((acc, listArray) => acc + listArray.length, 0);
+        }
+    } catch(e) {}
+
+
+    // ──────────── UPDATE STATS GRID ────────────
+  statsGrid.innerHTML = `
+        <div class="overview-stat-card">
+            <div class="overview-stat-icon"><i class="fas fa-layer-group"></i></div>
+            <div class="overview-stat-title">Total Items</div>
+            <div class="overview-stat-value">${totalItems}</div>
+            <div class="overview-stat-subtitle">Anime, Movies, Series & Manhwa</div>
+        </div>
+        
+        <div class="overview-stat-card">
+            <div class="overview-stat-icon"><i class="fas fa-star"></i></div>
+            <div class="overview-stat-title">Total Reviews</div>
+            <div class="overview-stat-value">${reviewCount}</div>
+            <div class="overview-stat-subtitle">${avgRating} avg rating</div>
+        </div>
+        
+        <div class="overview-stat-card">
+            <div class="overview-stat-icon"><i class="fas fa-heart"></i></div>
+            <div class="overview-stat-title">Favorites</div>
+            <div class="overview-stat-value">${favCount}</div>
+            <div class="overview-stat-subtitle">Characters & Cast</div>
+        </div>
+        
+        <div class="overview-stat-card">
+            <div class="overview-stat-icon"><i class="fas fa-user-circle"></i></div>
+            <div class="overview-stat-title">Status</div>
+            <div class="overview-stat-value">Active</div>
+            <div class="overview-stat-subtitle">Member</div>
+        </div>
+    `;
+
+
+    // ───────────────────────────────────────────────
+    // ❗ KEEPING YOUR EXISTING RECENT ACTIVITY SECTION
+    // ───────────────────────────────────────────────
+    
+    const activities = getRecentActivity();
+
+    if (activities.length === 0) {
+        activityList.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon"><i class="fas fa-history"></i></div>
+            <div class="empty-text">No Recent Activity</div>
+            <div class="empty-subtext">Start adding content to see your activity here</div>
+            <button class="empty-btn" onclick="window.location.href='index.html'">
+              <i class="fas fa-search"></i> Explore Content
+            </button>
+          </div>
+        `;
+    } else {
+        activityList.innerHTML = activities.map(activity => `
+          <div class="activity-item">
+            <div class="activity-icon" style="background: rgba(${hexToRgb(activity.color)}, 0.1); color: ${activity.color};">
+              <i class="fas ${activity.icon}"></i>
+            </div>
+            <div class="activity-content">
+              <div class="activity-text">${activity.text}</div>
+              <div class="activity-time">${formatTimeAgo(activity.time)}</div>
+            </div>
+          </div>
+        `).join('');
+    }
+
+}
+
+async function loadReviewsContent() {
+    const reviewsContainer = document.getElementById('reviews-section-content');
+    if (!reviewsContainer) return;
+
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    try {
+        const res = await fetch('/api/reviews/me', { headers: { Authorization: `Bearer ${token}` } });
+        if (!res.ok) return;
+        
+        const reviews = await res.json();
+        
+        if (reviews.length === 0) {
+            reviewsContainer.innerHTML = `
+              <div class="empty-state">
+                <div class="empty-icon"><i class="fas fa-star"></i></div>
+                <div class="empty-text">No Reviews Yet</div>
+              </div>`;
+            return;
+        }
+
+        reviewsContainer.innerHTML = reviews.map(r => `
+          <div class="review-section-card">
+            <div class="review-section-header">
+              <div class="review-section-title">${escapeHtml(r.item_id || 'Unknown Title')}</div>
+              <div class="review-section-category">${(r.item_type || 'General').toUpperCase()}</div>
+            </div>
+            
+            ${r.title ? `<div style="font-weight:bold; margin-bottom:10px; color:#fff;">${escapeHtml(r.title)}</div>` : ''}
+            
+            <div class="review-section-rating">
+              ${'★'.repeat(r.rating || 0)}
+              <span style="color:var(--muted); font-size:0.9rem; margin-left:8px;">(${r.rating || 0}/10)</span>
+            </div>
+            
+            <div class="review-section-text">${escapeHtml(r.body || '')}</div>
+            
+            <div class="review-section-footer">
+              <div class="review-section-date">Posted on ${new Date(r.created_at).toLocaleDateString()}</div>
+              <div class="review-section-actions">
+                 <button class="review-section-btn" style="color:#ef4444" onclick="deleteGlobalReview('${r.id}')">
+                   <i class="fas fa-trash"></i> Delete
+                 </button>
+              </div>
+            </div>
+          </div>
+        `).join('');
+    } catch (e) {
+        console.error('Error loading reviews', e);
+    }
+}
+// helper renderer used by server and local lists
+function renderReviews(reviews) {
+  const reviewsContainer = document.getElementById('reviews-section-content');
+  if (!reviewsContainer) return;
+  if (!reviews || reviews.length === 0) {
+    reviewsContainer.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon"><i class="fas fa-star"></i></div>
+        <div class="empty-text">No Reviews Yet</div>
+        <div class="empty-subtext">Go to an Anime or Movie page and write a review!</div>
+      </div>
+    `;
+    return;
+  }
+
+  reviewsContainer.innerHTML = reviews.map(review => `
+    <div class="review-section-card">
+      <div class="review-section-header">
+        <div class="review-section-title">${review.itemTitle || 'Untitled'}</div>
+        <div class="review-section-category">${(review.category || 'General').toUpperCase()}</div>
+      </div>
+      <div class="review-section-rating">${'★'.repeat(review.rating || 0)}<span style="color:var(--muted); font-size:0.9rem; margin-left:8px;">(${review.rating || 0}/10)</span></div>
+      <div class="review-section-text">${review.text || ''}</div>
+      <div class="review-section-footer">
+        <div class="review-section-date">Posted on ${new Date(review.date || review.createdAt || review.created_at).toLocaleDateString()}</div>
+        <div class="review-section-actions">
+           <button class="review-section-btn" style="color:#ef4444" onclick="deleteGlobalReview('${review.id}')">
+             <i class="fas fa-trash"></i> Delete
+           </button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// Add this helper function right below loadReviewsContent
+function deleteGlobalReview(id) {
+    if(!confirm("Are you sure you want to delete this review?")) return;
+
+    const token = localStorage.getItem('token');
+    if (token) {
+      (async () => {
+        try {
+          const res = await fetch(`/api/reviews/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+          if (!res.ok) { const d = await res.json(); alert(d.error || 'Failed to delete review'); return; }
+          loadReviewsContent();
+          loadAllStatistics();
+        } catch (e) { console.error('Failed to delete review', e); alert('Network error'); }
+      })();
+      return;
+    }
+
+    let allReviews = JSON.parse(localStorage.getItem('ev_all_reviews')) || [];
+    // Remove the review with the matching ID
+    allReviews = allReviews.filter(r => r.id !== id);
+    
+    // Save back to storage
+    localStorage.setItem('ev_all_reviews', JSON.stringify(allReviews));
+    
+    // Refresh the screen
+    loadReviewsContent(); 
+    loadAllStatistics(); // Update stats numbers
+}
+
+    function loadMyListContent() {
+      const mylistContainer = document.getElementById('mylist-section-grid');
+      if (!mylistContainer) return;
+      
+      const animeStats = getListStats(STORAGE_KEYS.anime, 'anime');
+      const movieStats = getListStats(STORAGE_KEYS.movie, 'movie');
+      const seriesStats = getListStats(STORAGE_KEYS.series, 'series');
+      const manhwaStats = getListStats(STORAGE_KEYS.manhwa, 'manhwa');
+      const favStats = getFavoritesStats();
+      
+      mylistContainer.innerHTML = `
+        <div class="mylist-section-category" onclick="openListModal('anime')">
+          <div class="mylist-section-icon"><i class="fas fa-ghost"></i></div>
+          <div class="mylist-section-name">Anime List</div>
+          <div class="mylist-section-count">${animeStats.totalEntries} entries</div>
+          <div class="mylist-section-button">View All</div>
+        </div>
+        
+        <div class="mylist-section-category" onclick="openListModal('movie')">
+          <div class="mylist-section-icon"><i class="fas fa-film"></i></div>
+          <div class="mylist-section-name">Movie List</div>
+          <div class="mylist-section-count">${movieStats.totalEntries} entries</div>
+          <div class="mylist-section-button">View All</div>
+        </div>
+        
+        <div class="mylist-section-category" onclick="openListModal('series')">
+          <div class="mylist-section-icon"><i class="fas fa-tv"></i></div>
+          <div class="mylist-section-name">Series List</div>
+          <div class="mylist-section-count">${seriesStats.totalEntries} entries</div>
+          <div class="mylist-section-button">View All</div>
+        </div>
+        
+        <div class="mylist-section-category" onclick="openListModal('manhwa')">
+          <div class="mylist-section-icon"><i class="fas fa-book-open"></i></div>
+          <div class="mylist-section-name">Manhwa List</div>
+          <div class="mylist-section-count">${manhwaStats.totalEntries} entries</div>
+          <div class="mylist-section-button">View All</div>
+        </div>
+        
+        <div class="mylist-section-category" onclick="openFavoritesModal()">
+          <div class="mylist-section-icon"><i class="fas fa-heart"></i></div>
+          <div class="mylist-section-name">Favorites</div>
+          <div class="mylist-section-count">${favStats.total} characters & cast</div>
+          <div class="mylist-section-button">View All</div>
+        </div>
+        
+        <div class="mylist-section-category" onclick="openAddReviewModal()">
+          <div class="mylist-section-icon"><i class="fas fa-pen"></i></div>
+          <div class="mylist-section-name">Write Review</div>
+          <div class="mylist-section-count">Share your thoughts</div>
+          <div class="mylist-section-button">Create New</div>
+        </div>
+      `;
+    }
+
+
+
+    function loadSettingsContent() {
+      const settingsContainer = document.getElementById('settings-section-grid');
+      if (!settingsContainer) return;
+      
+      const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+      
+      settingsContainer.innerHTML = `
+        <div class="settings-section-card">
+          <div class="settings-section-title"><i class="fas fa-bell"></i> Notifications</div>
+          <div class="settings-section-item">
+            <div>
+              <div class="settings-section-label">Email Notifications</div>
+              <div class="settings-section-description">Receive updates about your watched content</div>
+            </div>
+            <button class="toggle-switch active" onclick="toggleSetting(this)"></button>
+          </div>
+          <div class="settings-section-item">
+            <div>
+              <div class="settings-section-label">Review Recommendations</div>
+              <div class="settings-section-description">Get suggestions for writing reviews</div>
+            </div>
+            <button class="toggle-switch active" onclick="toggleSetting(this)"></button>
+          </div>
+          <div class="settings-section-item">
+            <div>
+              <div class="settings-section-label">New Content Alerts</div>
+              <div class="settings-section-description">Notify when new content is added</div>
+            </div>
+            <button class="toggle-switch" onclick="toggleSetting(this)"></button>
+          </div>
+        </div>
+        
+        <div class="settings-section-card">
+          <div class="settings-section-title"><i class="fas fa-sliders-h"></i> Preferences</div>
+          <div class="form-group">
+            <label class="form-label">Favorite Category</label>
+            <select class="form-select" id="category-select">
+              <option value="anime" ${currentUser.category === 'anime' ? 'selected' : ''}>Anime</option>
+              <option value="movies" ${currentUser.category === 'movies' ? 'selected' : ''}>Movies</option>
+              <option value="series" ${currentUser.category === 'series' ? 'selected' : ''}>TV Series</option>
+              <option value="manhwa" ${currentUser.category === 'manhwa' ? 'selected' : ''}>Manhwa</option>
+              <option value="all" ${currentUser.category === 'all' ? 'selected' : ''}>All of the above</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Default Rating System</label>
+            <select class="form-select" id="rating-system">
+              <option value="5star">5 Star Rating</option>
+              <option value="10point">10 Point Scale</option>
+              <option value="percentage">Percentage</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Theme</label>
+            <select class="form-select" id="theme-select">
+              <option value="dark">Dark Theme</option>
+              <option value="light">Light Theme</option>
+              <option value="auto">Auto (System)</option>
+            </select>
+          </div>
+          <button class="submit-btn" onclick="savePreferences()">Save Preferences</button>
+        </div>
+        
+        <div class="settings-section-card">
+          <div class="settings-section-title"><i class="fas fa-user-cog"></i> Account Settings</div>
+          <div class="settings-section-item">
+            <div>
+              <div class="settings-section-label">Change Password</div>
+              <div class="settings-section-description">Update your account password</div>
+            </div>
+            <button class="review-section-btn" onclick="changePassword()">
+              <i class="fas fa-key"></i> Change
+            </button>
+          </div>
+          <div class="settings-section-item">
+            <div>
+              <div class="settings-section-label">Export Data</div>
+              <div class="settings-section-description">Download all your data as JSON</div>
+            </div>
+            <button class="review-section-btn" onclick="exportData()">
+              <i class="fas fa-download"></i> Export
+            </button>
+          </div>
+          <div class="settings-section-item">
+            <div>
+              <div class="settings-section-label">Delete Account</div>
+              <div class="settings-section-description">Permanently delete your account and all data</div>
+            </div>
+            <button class="review-section-btn" onclick="handleDeleteAccount()" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">
+              <i class="fas fa-trash"></i> Delete
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // --- Existing List Modal Functions (unchanged) ---
+    function openListModal(type) {
+      currentListType = type;
+      currentListFilter = 'all';
+      closeFullScreenSection();
+      
+      const modal = document.getElementById('full-list-view');
+      const title = document.getElementById('list-view-title');
+      const tabsContainer = document.getElementById('list-view-tabs-container');
+      const container = document.querySelector('.list-table-container');
+
+      container.innerHTML = `
+        <table class="list-table">
+          <thead>
+            <tr>
+              <th style="width:50px">#</th>
+              <th style="width:80px">Image</th>
+              <th>Title</th>
+              <th>Score</th>
+              <th>Type</th>
+              <th>Progress</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="list-table-body">
+          </tbody>
+        </table>
+      `;
+
+      title.textContent = "My " + type.charAt(0).toUpperCase() + type.slice(1) + " List";
+
+      let labels, keys;
+      if (type === 'manhwa') {
+        labels = ['All', 'Reading', 'Completed', 'On Hold', 'Dropped', 'Plan to Read'];
+        keys = ['all', 'reading', 'completed', 'onhold', 'dropped', 'planned'];
+      } else {
+        labels = ['All', 'Watching', 'Completed', 'On Hold', 'Dropped', 'Plan to Watch'];
+        keys = ['all', 'watching', 'completed', 'onhold', 'dropped', 'planned'];
+      }
+      
+      tabsContainer.innerHTML = keys.map((key, i) => 
+        `<button class="list-view-tab ${key === 'all' ? 'active' : ''}" onclick="filterList('${key}', this)">${labels[i]}</button>`
+      ).join('');
+
+      modal.classList.add('active');
+      renderListTable(type, 'all');
+    }
+
+    function closeListModal() {
+      document.getElementById('full-list-view').classList.remove('active');
+    }
+
+    function filterList(filterKey, btnElement) {
+      currentListFilter = filterKey;
+      document.querySelectorAll('.list-view-tab').forEach(b => b.classList.remove('active'));
+      btnElement.classList.add('active');
+      renderListTable(currentListType, filterKey);
+    }
+
+    // --- Existing Reviews Functions (unchanged) ---
+    function openAddReviewModal() { 
+      document.getElementById('review-modal').classList.add('active'); 
+      currentRating = 0;
+      resetReviewForm();
+    }
+
+    function closeAddReviewModal() { 
+      document.getElementById('review-modal').classList.remove('active'); 
+    }
+
+    function resetReviewForm() {
+      document.getElementById('review-title').value = '';
+      document.getElementById('review-category').value = '';
+      document.getElementById('review-item').value = '';
+      document.getElementById('review-text').value = '';
+      currentRating = 0;
+      document.querySelectorAll('.star-input').forEach((s, i) => s.classList.remove('active'));
+    }
+
+    function setRating(r) { 
+      currentRating = r; 
+      document.querySelectorAll('.star-input').forEach((s, i) => {
+        s.classList.toggle('active', i < r);
+      });
+    }
+
+    function submitReview() {
+      const title = document.getElementById('review-title').value.trim();
+      const category = document.getElementById('review-category').value;
+      const item = document.getElementById('review-item').value.trim();
+      const text = document.getElementById('review-text').value.trim();
+
+      if (!title || !category || !item || !text || currentRating === 0) { 
+        alert('Please fill all fields and select a rating'); 
+        return; 
+      }
+
+      const token = localStorage.getItem('token');
+
+      // If logged in, POST review to backend so other users can see it
+      if (token) {
+        (async () => {
+          try {
+            const res = await fetch('/api/reviews', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+              body: JSON.stringify({ item_id: item, item_type: category, rating: currentRating, title, body: text })
+            });
+            const data = await res.json();
+            if (!res.ok) { alert(data.error || 'Failed to submit review'); return; }
+            closeAddReviewModal();
+            loadReviewsContent();
+            loadAllStatistics();
+            showNotification('Review submitted successfully!', 'success');
+            return;
+          } catch (e) {
+            console.error('Failed to post review', e);
+            alert('Network error while posting review');
+            return;
+          }
+        })();
+        return;
+      }
+
+      // Fallback for guests: save review locally
+      const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+      const allReviews = JSON.parse(localStorage.getItem(STORAGE_KEYS.reviews)) || [];
+      
+      const newReview = {
+        id: Date.now().toString(),
+        userId: currentUser.id || 'guest',
+        userName: currentUser.name || 'Anonymous',
+        title,
+        category,
+        itemName: item,
+        rating: currentRating,
+        text,
+        createdAt: new Date().toISOString(),
+        date: new Date().toISOString()
+      };
+
+      allReviews.unshift(newReview);
+      localStorage.setItem(STORAGE_KEYS.reviews, JSON.stringify(allReviews));
+
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      const userIndex = users.findIndex(u => u.id === currentUser.id);
+      if (userIndex !== -1) {
+        if (!users[userIndex].reviews) users[userIndex].reviews = [];
+        users[userIndex].reviews.push(newReview);
+        localStorage.setItem('users', JSON.stringify(users));
+      }
+
+      closeAddReviewModal();
+      loadReviewsContent();
+      loadAllStatistics();
+      showNotification('Review submitted locally (not logged in)', 'info');
+    }
+
+    function deleteReview(reviewId) {
+      if (!confirm('Are you sure you want to delete this review?')) return;
+      
+      const allReviews = JSON.parse(localStorage.getItem(STORAGE_KEYS.reviews)) || [];
+      const updatedReviews = allReviews.filter(r => r.id !== reviewId);
+      localStorage.setItem(STORAGE_KEYS.reviews, JSON.stringify(updatedReviews));
+
+      const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      const userIndex = users.findIndex(u => u.id === currentUser.id);
+      if (userIndex !== -1 && users[userIndex].reviews) {
+        users[userIndex].reviews = users[userIndex].reviews.filter(r => r.id !== reviewId);
+        localStorage.setItem('users', JSON.stringify(users));
+      }
+
+      loadReviewsContent();
+      loadAllStatistics();
+      showNotification('Review deleted!', 'info');
+    }
+
+    function editReview(reviewId) {
+      const allReviews = JSON.parse(localStorage.getItem(STORAGE_KEYS.reviews)) || [];
+      const review = allReviews.find(r => r.id === reviewId);
+      if (!review) return;
+
+      document.getElementById('review-title').value = review.title;
+      document.getElementById('review-category').value = review.category;
+      document.getElementById('review-item').value = review.itemName;
+      document.getElementById('review-text').value = review.text;
+      setRating(review.rating);
+      
+      const submitBtn = document.querySelector('#review-modal .submit-btn');
+      submitBtn.textContent = 'Update Review';
+      submitBtn.onclick = function() { updateReview(reviewId); };
+      
+      openAddReviewModal();
+    }
+
+    function updateReview(reviewId) {
+      const title = document.getElementById('review-title').value.trim();
+      const category = document.getElementById('review-category').value;
+      const item = document.getElementById('review-item').value.trim();
+      const text = document.getElementById('review-text').value.trim();
+
+      if (!title || !category || !item || !text || currentRating === 0) { 
+        alert('Please fill all fields and select a rating'); 
+        return; 
+      }
+
+      const allReviews = JSON.parse(localStorage.getItem(STORAGE_KEYS.reviews)) || [];
+      const reviewIndex = allReviews.findIndex(r => r.id === reviewId);
+      
+      if (reviewIndex !== -1) {
+        allReviews[reviewIndex] = {
+          ...allReviews[reviewIndex],
+          title,
+          category,
+          itemName: item,
+          rating: currentRating,
+          text,
+          updatedAt: new Date().toISOString()
+        };
+        
+        localStorage.setItem(STORAGE_KEYS.reviews, JSON.stringify(allReviews));
+
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const userIndex = users.findIndex(u => u.id === currentUser.id);
+        if (userIndex !== -1 && users[userIndex].reviews) {
+          const userReviewIndex = users[userIndex].reviews.findIndex(r => r.id === reviewId);
+          if (userReviewIndex !== -1) {
+            users[userIndex].reviews[userReviewIndex] = allReviews[reviewIndex];
+            localStorage.setItem('users', JSON.stringify(users));
+          }
+        }
+
+        closeAddReviewModal();
+        loadReviewsContent();
+        loadAllStatistics();
+        showNotification('Review updated successfully!', 'success');
+      }
+    }
+
+    // --- Settings Functions ---
+    function toggleSetting(btn) { 
+      btn.classList.toggle('active'); 
+      showNotification('Setting updated!', 'info');
+    }
+    
+    function handleLogout() { 
+      updateLastActive();
+      localStorage.removeItem('currentUser'); 
+      localStorage.removeItem('rememberMe'); 
+      window.location.href = 'index.html'; 
+    }
+    
+    function savePreferences() {
+      const cat = document.getElementById('category-select').value;
+      const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      const idx = users.findIndex(u => u.id === currentUser.id);
+      if(idx !== -1) {
+        users[idx].category = cat;
+        localStorage.setItem('users', JSON.stringify(users));
+        currentUser.category = cat;
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        document.getElementById('profile-category').textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
+        showNotification('Preferences saved!', 'success');
+      }
+    }
+    
+    function handleDeleteAccount() {
+      if(!confirm('Are you sure you want to delete your account? This action cannot be undone and will delete all your data.')) return;
+      
+      const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      const updatedUsers = users.filter(u => u.id !== currentUser.id);
+      localStorage.setItem('users', JSON.stringify(updatedUsers));
+      
+      localStorage.removeItem('currentUser');
+      
+      alert('Account deleted successfully!');
+      window.location.href = 'index.html';
+    }
+    
+    function changePassword() {
+      alert('Password change functionality would be implemented here in a real application.');
+    }
+    
+    function exportData() {
+      const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+      const userId = currentUser.id || 'guest';
+      
+      const exportData = {
+        user: currentUser,
+        reviews: getAllUserReviews(userId),
+        animeList: JSON.parse(localStorage.getItem(STORAGE_KEYS.anime) || '{}'),
+        movieList: JSON.parse(localStorage.getItem(STORAGE_KEYS.movie) || '{}'),
+        seriesList: JSON.parse(localStorage.getItem(STORAGE_KEYS.series) || '{}'),
+        manhwaList: JSON.parse(localStorage.getItem(STORAGE_KEYS.manhwa) || '{}'),
+        favorites: JSON.parse(localStorage.getItem(STORAGE_KEYS.favorites) || '[]'),
+        exportDate: new Date().toISOString()
+      };
+      
+      const dataStr = JSON.stringify(exportData, null, 2);
+      const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+      
+      const exportFileDefaultName = `entertainmentverse-data-${userId}-${new Date().toISOString().split('T')[0]}.json`;
+      
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', exportFileDefaultName);
+      linkElement.click();
+      
+      showNotification('Data exported successfully!', 'success');
+    }
+
+    // --- Helper Functions ---
+    function escapeHtml(text) {
+      if (!text) return '';
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function hexToRgb(hex) {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? 
+        `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : 
+        '138, 43, 226';
+    }
+
+    function formatTimeAgo(date) {
+      const now = new Date();
+      const diff = now - date;
+      
+      const minutes = Math.floor(diff / 60000);
+      const hours = Math.floor(diff / 3600000);
+      const days = Math.floor(diff / 86400000);
+      
+      if (minutes < 1) return 'Just now';
+      if (minutes < 60) return `${minutes} minute${minutes === 1 ? '' : 's'} ago`;
+      if (hours < 24) return `${hours} hour${hours === 1 ? '' : 's'} ago`;
+      if (days < 7) return `${days} day${days === 1 ? '' : 's'} ago`;
+      
+      return date.toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric',
+        year: days < 365 ? undefined : 'numeric'
+      });
+    }
+
+    // --- Notification System ---
+    function showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.className = `notification notification-${type}`;
+      notification.innerHTML = `
+        <div style="position:fixed; top:20px; right:20px; background:${type === 'success' ? 'rgba(76,175,80,0.9)' : type === 'error' ? 'rgba(244,67,54,0.9)' : 'rgba(138,43,226,0.9)'}; 
+                     color:#fff; padding:15px 20px; border-radius:8px; z-index:10000; box-shadow:0 5px 20px rgba(0,0,0,0.3); 
+                     display:flex; align-items:center; gap:10px; animation:slideInRight 0.3s ease;">
+          <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+          <span>${message}</span>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+          }
+        }, 300);
+      }, 3000);
+    }
+
+    // Add animation styles
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideInRight {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      @keyframes slideOutRight {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // --- Real-time updates ---
+    setInterval(() => {
+      if (currentFullScreenSection === 'overview' || currentFullScreenSection === 'mylist') {
+        loadAllStatistics();
+        if (currentFullScreenSection === 'overview') {
+          loadOverviewContent();
+        } else if (currentFullScreenSection === 'mylist') {
+          loadMyListContent();
+        }
+      }
+    }, 30000);
+
+    // Listen for storage changes
+    window.addEventListener('storage', (e) => {
+      if (Object.values(STORAGE_KEYS).includes(e.key)) {
+        loadAllStatistics();
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+        if (currentFullScreenSection === 'reviews') {
+          loadReviewsContent();
+        } else if (currentFullScreenSection === 'overview') {
+          loadOverviewContent();
+        } else if (currentFullScreenSection === 'mylist') {
+          loadMyListContent();
+        }
+      }
+    });
+
+    // --- Keep existing functions that aren't modified ---
+    // These functions remain exactly as in your original code:
+    // - renderListTable()
+    // - openFavoritesModal()
+    // - filterFavorites()
+    // - renderFavoritesGrid()
+    // - openCharacterDetailModal()
+    // - closeCharacterDetailModal()
+    // - removeFromFavorites()
+    // - viewSourceMedia()
+    // - openDetailModalFromObject()
+    // - closeUnifiedModal()
+    // - All the list view and detail modal functions
+    
+    // Since the code is already very long, I'm keeping the existing functions as-is
+    // They should work with the new structure since we're just changing the UI layout
+    
+    // Note: You'll need to copy the existing functions from your original code
+    // for renderListTable, openFavoritesModal, filterFavorites, renderFavoritesGrid,
+    // openCharacterDetailModal, closeCharacterDetailModal, removeFromFavorites,
+    // viewSourceMedia, openDetailModalFromObject, closeUnifiedModal, and other
+    // modal-related functions that weren't directly modified in this refactor.
+    
+    // The key changes are:
+    // 1. Removed the tab system from the main profile page
+    // 2. Added navigation buttons below the Explore Content button
+    // 3. Created full-screen sections for Overview, Reviews, MyList, and Settings
+    // 4. Updated the Reviews section to show all reviews without the "Add New Review" button
+    // 5. Enhanced each section with better styling and functionality
+
+
+async function renderListTable(type, filter) {
+    const tbody = document.getElementById('list-table-body');
+    if (!tbody) return;
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Loading...</td></tr>';
+
+    const token = localStorage.getItem('token');
+    
+    try {
+        // 1. Fetch from Database
+        const res = await fetch('/api/lists/me', { headers: { Authorization: `Bearer ${token}` } });
+        const lists = await res.json();
+        
+        // 2. Filter items based on type (anime/movie/etc) and status
+        let allItems = [];
+        
+        // Iterate over keys like 'anime:watching', 'movie:planned'
+        Object.keys(lists).forEach(key => {
+            const [listType, status] = key.split(':');
+            
+            // Only process if type matches (e.g. 'anime' == 'anime')
+            if (listType === type) {
+                // If filter is 'all' or matches the status
+                if (filter === 'all' || filter === status) {
+                    lists[key].forEach(itemData => {
+                        // The DB returns { id, item: {...}, created_at }
+                        // We need the inner 'item' object
+                        const actualItem = itemData.item;
+                        actualItem._status = status; // Attach status for display
+                        actualItem._dbId = itemData.id; // Store DB ID for deletion
+                        allItems.push(actualItem);
+                    });
+                }
+            }
+        });
+
+        if (allItems.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:40px; color:var(--muted);">No entries found in your database list.</td></tr>`;
+            return;
+        }
+
+        // 3. Render Rows
+        tbody.innerHTML = allItems.map((item, index) => {
+            let imgUrl = item.image || item.poster_path ? `https://image.tmdb.org/t/p/w92${item.poster_path}` : 'https://via.placeholder.com/50x70';
+            // Handle Jikan (Anime) structure if different
+            if(item.images?.jpg?.image_url) imgUrl = item.images.jpg.image_url;
+
+            const title = item.title || item.name || 'Unknown';
+            const score = item.score || item.vote_average || '-';
+            const displayStatus = item._status.toUpperCase();
+
+            return `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td><img src="${imgUrl}" class="item-thumb" style="width:50px; height:70px; object-fit:cover; border-radius:4px;"></td>
+                    <td><span class="item-title" style="font-weight:bold;">${title}</span></td>
+                    <td><i class="fas fa-star" style="color:gold"></i> ${score}</td>
+                    <td>${type.toUpperCase()}</td>
+                    <td><span style="padding:4px 10px; border-radius:12px; background:rgba(138,43,226,0.1); font-size:0.85rem;">${displayStatus}</span></td>
+                    <td>
+                        <button style="color:#ef4444; background:none; border:none; cursor:pointer;" 
+                                onclick="removeItemFromDatabase('${item._dbId}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+        
+    } catch (e) {
+        console.error(e);
+        tbody.innerHTML = '<tr><td colspan="7">Error loading list</td></tr>';
+    }
+}
+
+// Add this helper function for database deletion
+async function removeItemFromDatabase(dbId) {
+    if(!confirm("Delete this item?")) return;
+    const token = localStorage.getItem('token');
+    await fetch(`/api/lists/${dbId}`, { 
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` }
+    });
+    // Refresh the view
+    const activeTab = document.querySelector('.list-view-tab.active');
+    const filter = activeTab ? activeTab.innerText.toLowerCase() : 'all';
+    // We need to know the type (anime/movie) - simplistic check:
+    const title = document.getElementById('list-view-title').textContent.toLowerCase();
+    let type = 'anime';
+    if(title.includes('movie')) type = 'movie';
+    else if(title.includes('series')) type = 'series';
+    else if(title.includes('manhwa')) type = 'manhwa';
+    
+    renderListTable(type, 'all'); 
+    loadAllStatistics(); // Refresh stats
+}
+// Helper to remove items directly from the table
+function removeItemFromProfile(type, id, status) {
+    if(!confirm("Remove this entry from your list?")) return;
+    
+    const storageKey = `ev_my_${type}_list`;
+    const listData = JSON.parse(localStorage.getItem(storageKey)) || {};
+    
+    if (listData[status]) {
+        // Filter out the item matching the ID
+        listData[status] = listData[status].filter(i => (i.mal_id != id && i.id != id));
+        
+        // Save back to storage
+        localStorage.setItem(storageKey, JSON.stringify(listData));
+        
+        // Refresh the table
+        const currentFilterBtn = document.querySelector('.list-view-tab.active');
+        // Determine current filter key
+        let filterKey = 'all';
+        // (Simplified logic to match your tabs)
+        if(currentFilterBtn) {
+             const txt = currentFilterBtn.innerText.toLowerCase();
+             if(txt.includes('plan')) filterKey = 'planned';
+             else if(!txt.includes('all')) filterKey = txt;
+        }
+        
+        renderListTable(type, filterKey);
+        loadAllStatistics(); // Update header stats
+    }
+}
+
+
+function getListStats(listKey, type) {
+    // 1. Get the data
+    const listData = JSON.parse(localStorage.getItem(listKey)) || {};
+    
+    // 2. Helper to count arrays safely
+    const count = (arr) => (Array.isArray(arr) ? arr.length : 0);
+
+    let stats = {
+        watching: 0,
+        completed: count(listData.completed),
+        onhold: count(listData.onhold),
+        dropped: count(listData.dropped),
+        planned: count(listData.planned),
+        totalEntries: 0
+    };
+
+    // Manhwa uses 'reading', Anime/Movie uses 'watching'
+    if (type === 'manhwa') {
+        stats.watching = count(listData.reading);
+    } else {
+        stats.watching = count(listData.watching);
+    }
+
+    // Calculate total
+    stats.totalEntries = stats.watching + stats.completed + stats.onhold + stats.dropped + stats.planned;
+
+    return stats;
+}
+
+
+/* --- FAVORITES LOGIC --- */
+
+// 1. Open the Favorites Overlay
+function openFavoritesModal() {
+    // Close other full screen sections if open
+    closeFullScreenSection();
+    
+    const modal = document.getElementById('favorites-view');
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Stop background scrolling
+    
+    // Default filter: All
+    renderFavorites('all');
+}
+
+// 2. Close the Favorites Overlay
+function closeFavoritesModal() {
+    const modal = document.getElementById('favorites-view');
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
+
+// 3. Filter Logic (Tab Switching)
+function filterFavorites(filter, btn) {
+    // Update active tab style
+    document.querySelectorAll('#favorites-view .list-view-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    // Render with new filter
+    renderFavorites(filter);
+}
+
+// 4. Main Render Function
+async function renderFavorites(filter) {
+    const grid = document.getElementById('favorites-grid');
+    
+    // Show a loading state while fetching
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:white;padding:40px;">Loading favorites...</div>';
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+        grid.innerHTML = '<div style="color:var(--accent);text-align:center;">Please log in to view favorites.</div>';
+        return;
+    }
+
+    try {
+        // 1. Fetch fresh data from the database
+        const res = await fetch('/api/favorites/me', {
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+        
+        if (!res.ok) throw new Error('Failed to fetch');
+        
+        const favorites = await res.json(); 
+
+        // 2. Filter items based on the selected tab
+        // The DB column is 'item_type' (anime, movie, series, manhwa)
+        const items = filter === 'all' 
+            ? favorites 
+            : favorites.filter(item => item.item_type === filter);
+
+        // 3. Empty State
+        if (items.length === 0) {
+            grid.innerHTML = `
+                <div style="grid-column: 1/-1; text-align: center; padding: 60px; color: var(--muted);">
+                    <i class="fas fa-heart-broken" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.5;"></i>
+                    <h3>No favorites found in this category</h3>
+                </div>`;
+            return;
+        }
+
+        // 4. Render Cards
+        grid.innerHTML = items.map(fav => {
+            // IMPORTANT: The details are inside the 'meta' object from your DB
+            const meta = fav.meta || {}; 
+            
+            // Handle Images for all categories
+            let imgUrl = 'https://via.placeholder.com/150?text=No+Img';
+            
+            if (meta.image_url) {
+                // Anime & Manhwa (Jikan API) usually provide a full URL
+                imgUrl = meta.image_url;
+            } else if (meta.profile_path) {
+                // Movie & Series Cast (TMDB) provide a path that needs a prefix
+                imgUrl = `https://image.tmdb.org/t/p/w200${meta.profile_path}`;
+            } else if (meta.poster_path) {
+                // Fallback for some movie/series items
+                imgUrl = `https://image.tmdb.org/t/p/w200${meta.poster_path}`;
+            }
+
+            // Badge Text (e.g. "Anime", "Movie")
+            // specific checks if you want "Acting" for actors vs "Movie"
+            let badgeText = fav.item_type.toUpperCase(); 
+
+            return `
+                <div class="fav-card">
+                    <div class="fav-remove" onclick="removeFavorite('${fav.id}')" title="Remove">
+                        <i class="fas fa-times"></i>
+                    </div>
+                    <div class="fav-img-wrapper">
+                        <img src="${imgUrl}" class="fav-img" alt="${meta.name || 'Character'}">
+                    </div>
+                    <div class="fav-name">${escapeHtml(meta.name || 'Unknown')}</div>
+                    <div class="fav-badge">${badgeText}</div>
+                </div>
+            `;
+        }).join('');
+
+    } catch (err) {
+        console.error('Error rendering favorites:', err);
+        grid.innerHTML = '<div style="color:red;text-align:center;">Error loading favorites.</div>';
+    }
+}
+
+// 5. Remove Favorite Helper
+function removeFavorite(id) {
+    if(!confirm('Remove this from favorites?')) return;
+
+    let favorites = JSON.parse(localStorage.getItem('ev_favorite_characters')) || [];
+    // Filter out the item with the matching ID
+    favorites = favorites.filter(item => item.id != id);
+    
+    // Save and refresh
+    localStorage.setItem('ev_favorite_characters', JSON.stringify(favorites));
+    
+    // Find currently active tab to keep user on same view
+    const activeBtn = document.querySelector('#favorites-view .list-view-tab.active');
+    const currentFilter = activeBtn ? activeBtn.innerText.toLowerCase().replace(' cast', '').replace(' characters', '') : 'all';
+    
+    // Handle specific mapping if needed (e.g., "Movie Cast" button maps to "movie" filter)
+    let filterKey = 'all';
+    if(activeBtn.innerText.includes('Movie')) filterKey = 'movie';
+    else if(activeBtn.innerText.includes('Anime')) filterKey = 'anime';
+    else if(activeBtn.innerText.includes('Series')) filterKey = 'series';
+
+    renderFavorites(filterKey);
+    loadAllStatistics(); // Update main profile stats
+}
+
+  </script>
+</body>
+</html>
